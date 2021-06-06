@@ -1,0 +1,52 @@
+﻿<Window x:Class="EzStream.NewAcc"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzStream"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="EzStreaming" Height="441" Width="390">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="51*"/>
+            <ColumnDefinition Width="79*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="Channel_Name" HorizontalAlignment="Left" Margin="30,20,0,0" Text="Channel Name" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" Height="37" FontWeight="Normal" FontSize="20" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="stream_key" HorizontalAlignment="Left" Margin="30,74,0,0" Text="Stream_Key" TextWrapping="Wrap" VerticalAlignment="Top" Width="322" Height="37" FontSize="20" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="Plarfomr_sel" HorizontalAlignment="Left" Margin="30,0,0,0" VerticalAlignment="Center" Width="159" Height="37" IsReadOnly="True" FontSize="20" Grid.ColumnSpan="2">
+            <ComboBoxItem IsSelected="True">Twitch</ComboBoxItem>
+            <ComboBoxItem>Youtube</ComboBoxItem>
+            <ComboBoxItem>Facebook</ComboBoxItem>
+            <!--<ComboBoxItem>Manual</ComboBoxItem>-->
+        </ComboBox>
+        <CheckBox x:Name="cb1" Content="Video" HorizontalAlignment="Left" Margin="30,246,0,0" VerticalAlignment="Top" Height="69" Width="322" Checked="CheckBox_Checked" Unchecked="CheckBox_unchecked" Grid.ColumnSpan="2"/>
+        <CheckBox x:Name="cb2" Content="Audio" HorizontalAlignment="Left" Margin="30,283,0,0" VerticalAlignment="Top" Height="70" Width="322" Checked="CheckBox2_Checked" Unchecked="CheckBox2_unchecked" Grid.ColumnSpan="2"/>
+        <Button Content="CREATE DIRECT SETTINGS" HorizontalAlignment="Left" Margin="24,328,0,0" VerticalAlignment="Top" Height="41" Width="328" Click="Button_Click" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="Codec_sel" HorizontalAlignment="Left" VerticalAlignment="Center" Width="158" Height="37" IsReadOnly="True" Margin="41,0,0,0" FontSize="20" Grid.Column="1">
+            <ComboBoxItem IsSelected="True" Content="h264_nvenc"/>
+            <ComboBoxItem Content="nvenc"/>
+            <ComboBoxItem Content="nvenc_h264"/>
+            <ComboBoxItem Content="nvenc_hevc"/>
+            <ComboBoxItem Content="hevc_amf"/>
+            <ComboBoxItem Content="hevc_nvenc"/>
+            <ComboBoxItem Content="hevc_qsv"/>
+            <ComboBoxItem Content="libx264"/>
+            <ComboBoxItem Content="libx264rgb"/>
+            <ComboBoxItem Content="libx265"/>
+            <ComboBoxItem Content="h264_amf"/>
+            <ComboBoxItem Content="h264_vaapi"/>
+            <ComboBoxItem Content="h264_amf"/>
+        </ComboBox>
+        <TextBox x:Name="bittrate" HorizontalAlignment="Left" Margin="30,131,0,0" Text="1000k" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="37" FontSize="20" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="fps" HorizontalAlignment="Left" Margin="41,131,0,0" Text="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="159" Height="37" FontSize="20" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="30,4,0,0" Text="Chanel Name" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="30,57,0,0" Text="Stream Key" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="30,115,0,0" Text="Bittrate" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="42,115,0,0" Text="FPS" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="30,178,0,0" Text="Platform" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="42,178,0,0" Text="Codec" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="151,374,0,0" Text="By: YAMT" TextWrapping="Wrap" VerticalAlignment="Top" Grid.Column="1"/>
+
+    </Grid>
+</Window>

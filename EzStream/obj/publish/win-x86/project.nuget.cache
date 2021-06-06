@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "dgSpecHash": "k+avnnGvo0FDKjrhObfxWCPQAlxxsVVsr43lYIwSJf7pJIM+3ic51n0VePpG7wuIxu6J8AsgtYxuYy+8c8AfnA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Pink\\.nuget\\packages\\autoupdater.net.official\\1.6.4\\autoupdater.net.official.1.6.4.nupkg.sha512",
+    "C:\\Users\\Pink\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\3.1.11\\microsoft.netcore.app.runtime.win-x86.3.1.11.nupkg.sha512",
+    "C:\\Users\\Pink\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\3.1.11\\microsoft.windowsdesktop.app.runtime.win-x86.3.1.11.nupkg.sha512",
+    "C:\\Users\\Pink\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\3.1.11\\microsoft.aspnetcore.app.runtime.win-x86.3.1.11.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"Autoupdater.NET.Official 1.6.4\" se restauró con \".NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8\" en lugar de la plataforma de destino del proyecto \".NETCoreApp,Version=v3.1\". Puede que el paquete no sea totalmente compatible con el proyecto.",
+      "libraryId": "Autoupdater.NET.Official",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
+}

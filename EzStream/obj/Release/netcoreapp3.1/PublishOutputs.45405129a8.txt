@@ -1,0 +1,5 @@
+C:\Users\Pink\Desktop\New folder\EzStreaming.exe
+C:\Users\Pink\Desktop\New folder\EzStreaming.dll
+C:\Users\Pink\Desktop\New folder\EzStreaming.deps.json
+C:\Users\Pink\Desktop\New folder\EzStreaming.runtimeconfig.json
+C:\Users\Pink\Desktop\New folder\EzStreaming.pdb
