@@ -154,8 +154,7 @@ namespace EzStream
                 case "Facebook":
                     return "rtmp://live-api-s.facebook.com:443/rtmp/";
                 default:
-                    return "rtmp://live.twitch.tv/app/";
-                    break;
+                    return "rtmp://live.twitch.tv/app/";s
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e){
@@ -164,7 +163,13 @@ namespace EzStream
                 SetAudio();
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
-                        MusicStreamer_fabryc();
+                        MusicStreamer_fabryc("libx264 -preset veryfast");
+                        break;
+                    case "MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA":
+                        MusicStreamer_fabryc("h264_nvenc");
+                        break;
+                    case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
+                        MusicStreamer_fabryc("h264_amf");
                         break;
                     case "GPU NVIDEA":
                         break;
@@ -182,12 +187,12 @@ namespace EzStream
             }else
                 MessageBox.Show("Please set correct values");
         }
-        void MusicStreamer_fabryc(){
+        void MusicStreamer_fabryc(string var){
             string input = "";
             if ((bool)cb2.IsChecked)
-                input = $"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
+                input = $"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {var} -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
             else
-                input = $"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
+                input = $"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {var} -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
 
             File.Create(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat").Dispose();
             using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat")){
@@ -235,6 +240,12 @@ namespace EzStream
             extra.Visibility = Visibility.Hidden;
             switch (default_presets.Text){
                 case "MusicStreamer/MassStreamer by viri":
+                    Custom.Visibility = Visibility.Visible;
+                    break;
+                case "MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA":
+                    Custom.Visibility = Visibility.Visible;
+                    break;
+                case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
                     Custom.Visibility = Visibility.Visible;
                     break;
                 case "GPU NVIDEA":

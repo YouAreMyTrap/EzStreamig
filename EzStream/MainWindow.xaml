@@ -93,6 +93,8 @@
 
                     <ComboBox x:Name="default_presets" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed">
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri"/>
+                        <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA"/>
+                        <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU AMD"/>
                         <ComboBoxItem Content="GPU NVIDEA"/>
                         <ComboBoxItem Content="GPU AMD"/>
                         <ComboBoxItem Content="CPU"/>

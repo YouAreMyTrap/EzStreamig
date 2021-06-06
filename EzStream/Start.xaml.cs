@@ -31,9 +31,9 @@ namespace EzStreaming
             }
             if (!File.Exists(Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe"))
                 using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("http://ezstreaming.orgfree.com/ffmpeg.exe"), Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe");
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe");
 
-            AutoUpdater.Start("http://ezstreaming.orgfree.com/update2.xml");
+            AutoUpdater.Start("https://github.com/YouAreMyTrap/EzStreamig/raw/main/update.xml");
             MainWindow win2 = new MainWindow();
             win2.Show();
             this.Close();
