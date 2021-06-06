@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WMv/12aMzgbfxFRGovXKkdbPAENVdpAOAlCzppuLwwg8W8aJNh8zrJgNsKQDn8sdIugeBfkw62zL1KCwpWIuLA==",
+  "dgSpecHash": "g79CU0JDGhS6hZaPaEpPsgTyohNvkmTWU7ceHGhah8MLcEpOUM+VUiMX6oOhPkf/TgtQLKQAQgOxW0bOGGM6JQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj",
+  "projectFilePath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pink\\.nuget\\packages\\autoupdater.net.official\\1.6.4\\autoupdater.net.official.1.6.4.nupkg.sha512"
   ],

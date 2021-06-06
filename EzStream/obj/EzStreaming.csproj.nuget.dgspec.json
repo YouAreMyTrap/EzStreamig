@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj": {}
+    "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj": {
+    "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {
       "version": "2.0.3",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj",
+        "projectUniqueName": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
         "projectName": "EzStreaming",
-        "projectPath": "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj",
+        "projectPath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
         "packagesPath": "C:\\Users\\Pink\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pink\\source\\repos\\EzStream\\obj\\",
+        "outputPath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Pink\\AppData\\Roaming\\NuGet\\NuGet.Config",
