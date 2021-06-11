@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vub+oEg+8hTZT/MyaXLIz5J3Lu0ClJ3dc7diMwxg0w7D7n9UMUpZzKeE3GELQ7BLr72Oo2Pk90fB58mCay0mRA==",
+  "dgSpecHash": "N2vZr2+UQ9c+s+7+WKXVGGHvucDHv1WWt3SOf9ZafN8AZuxlK3lK26rGICYue029BE0OPuRziib7zwyC6Dv18A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pink\\source\\repos\\EzStream\\EzStreaming.csproj",
+  "projectFilePath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pink\\.nuget\\packages\\autoupdater.net.official\\1.6.4\\autoupdater.net.official.1.6.4.nupkg.sha512",
     "C:\\Users\\Pink\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\3.1.11\\microsoft.netcore.app.runtime.win-x64.3.1.11.nupkg.sha512",

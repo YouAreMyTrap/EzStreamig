@@ -95,7 +95,7 @@ namespace EzStream
             MessageBox.Show("Disabled");
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e){
-            string applicationLocation = System.Reflection.Assembly.GetEntryAssembly().Location;
+            string applicationLocation = Directory.GetCurrentDirectory() + "/EzStreaming.exe";
             RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             if(AutoRun.IsChecked == true){ 
                 reg.SetValue("EzStream", applicationLocation);
@@ -154,7 +154,7 @@ namespace EzStream
                 case "Facebook":
                     return "rtmp://live-api-s.facebook.com:443/rtmp/";
                 default:
-                    return "rtmp://live.twitch.tv/app/";s
+                    return "rtmp://live.twitch.tv/app/";
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e){
@@ -163,44 +163,41 @@ namespace EzStream
                 SetAudio();
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
-                        MusicStreamer_fabryc("libx264 -preset veryfast");
-                        break;
+                        if ((bool)cb2.IsChecked)
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 - preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                        else
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                      break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA":
-                        MusicStreamer_fabryc("h264_nvenc");
-                        break;
+                        if ((bool)cb2.IsChecked)
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                        else
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                      break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
-                        MusicStreamer_fabryc("h264_amf");
-                        break;
+                        if ((bool)cb2.IsChecked)
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                        else
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                      break;
                     case "GPU NVIDEA":
-                        break;
+                      break;
                     case "GPU AMD":
-                        break;
+                      break;
                     case "CPU":
-                        break;
+                      break;
                     case "Custom":
-                        Custom_fabryc();
-                        break;
-
+                        if ((bool)cb2.IsChecked)
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}");
+                        else
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}");
+                      break;
                 }
-                this.lbox.Items.Add(new Channel { Channels = Channel_Name.Text });
-                MessageBox.Show("DONE");
+                this.lbox.Items.Add(new Channel { Channels = Channel_Name.Text, start = "/data/1.png" });
+                MessageBox.Show("Done");
             }else
                 MessageBox.Show("Please set correct values");
         }
-        void MusicStreamer_fabryc(string var){
-            string input = "";
-            if ((bool)cb2.IsChecked)
-                input = $"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {var} -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
-            else
-                input = $"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {var} -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}";
-
-            File.Create(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat").Dispose();
-            using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat")){
-                tw.WriteLine("Title " + Channel_Name.Text);
-                tw.WriteLine(input);
-            }
-        }
-
         void Setvideo(){
             if (System.IO.Path.GetExtension(video) != ".gif")
                 File.Copy(video, Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
@@ -210,10 +207,13 @@ namespace EzStream
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                 startInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "/Data/";
                 startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C" + $" ffmpeg -f gif -i {video} -c:v libx264 {Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text}.mp4";
+                startInfo.Arguments = "/C" + $" ffmpeg -f gif -i {video} -vf scale={Resolution.Text} -c:v libx264 -pix_fmt yuv420p {Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text}.mp4";
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
                 process.StartInfo = startInfo;
                 process.Start();
                 video = Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text + ".mp4";
+                process.WaitForExit();
             }
         }
         void SetAudio(){
@@ -221,20 +221,18 @@ namespace EzStream
             if ((bool)cb2.IsChecked)
                 File.Copy(audio, Directory.GetCurrentDirectory() + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
         }
-        void Custom_fabryc(){
-                    string input = "";
-                    if ((bool)cb2.IsChecked)
-                        input = $"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}";
-                    else
-                        input = $"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}";
-
-                    File.Create(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat").Dispose();
-                    using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat")){
-                        tw.WriteLine("Title " + Channel_Name.Text);
-                        tw.WriteLine(input);
-                    } 
-        }
         
+        void fabric(string input)
+        {
+            File.Create(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat").Dispose();
+            using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat"))
+            {
+                tw.WriteLine("Title " + Channel_Name.Text);
+                tw.WriteLine("mode con:lines=1");
+                tw.WriteLine("color 5A");
+                tw.WriteLine(input);
+            }
+        }
         private void default_presets_DropDownClosed(object sender, EventArgs e){
             Custom.Visibility = Visibility.Hidden;
             extra.Visibility = Visibility.Hidden;

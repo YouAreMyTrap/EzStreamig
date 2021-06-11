@@ -47,7 +47,7 @@
                         <Canvas x:Name="extra" Visibility="Visible">
                             <TextBox x:Name="bittrate" Text="1000k" TextWrapping="Wrap" Width="159" Height="37" FontSize="20" Canvas.Left="30" Canvas.Top="131"/>
                             <TextBlock Text="Bittrate" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="115"/>
-                        
+
                             <TextBox x:Name="fps" Text="30" TextWrapping="Wrap" Width="159" Height="37" FontSize="20" Canvas.Left="194" Canvas.Top="131"/>
                             <TextBlock Text="FPS" TextWrapping="Wrap" Canvas.Left="195" Canvas.Top="115"/>
 
@@ -58,19 +58,11 @@
                                 <ComboBoxItem Content="Facebook"/>
                                 <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                             </ComboBox>
-                        
+
                             <TextBlock Text="Codec" TextWrapping="Wrap" Canvas.Left="195" Canvas.Top="168"/>
                             <ComboBox x:Name="Codec_sel" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="194" Canvas.Top="184">
                                 <ComboBoxItem IsSelected="True" Content="h264_nvenc"/>
                                 <ComboBoxItem Content="libx264"/>
-                            </ComboBox>
-
-                            <TextBlock Text="Resolution" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="110"/>
-                            <ComboBox x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="126" IsEnabled="False">
-                                <ComboBoxItem Content="1920:1080"/>
-                                <ComboBoxItem IsSelected="True" Content="1280:720"/>
-                                <ComboBoxItem Content="640:480"/>
-                                <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                             </ComboBox>
 
                             <TextBlock Text="Preset" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="168"/>
@@ -89,6 +81,13 @@
                         </Canvas>
                         <CheckBox x:Name="cb1" Content="Video" Height="20" Width="322" Checked="CheckBox_video_Checked" Unchecked="CheckBox_video_unchecked" Canvas.Left="380" Canvas.Top="18"/>
                         <CheckBox x:Name="cb2" Content="Audio" Height="23" Width="322" Checked="CheckBox_audio_Checked" Unchecked="CheckBox_audio_unchecked" Canvas.Left="380" Canvas.Top="50"/>
+                        <TextBlock Text="Resolution" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="110"/>
+                        <ComboBox x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="126">
+                            <ComboBoxItem Content="1920:1080"/>
+                            <ComboBoxItem IsSelected="True" Content="1280:720"/>
+                            <ComboBoxItem Content="640:480"/>
+                            <!--<ComboBoxItem>Manual</ComboBoxItem>-->
+                        </ComboBox>
                     </Canvas>
 
                     <ComboBox x:Name="default_presets" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed">
@@ -100,7 +99,16 @@
                         <ComboBoxItem Content="CPU"/>
                         <ComboBoxItem IsSelected="True" Content="Custom"/>
                     </ComboBox>
-                    <Button Content="MAKE" HorizontalAlignment="Center" Margin="0,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click"/>
+                    <Button Grid.Column="0" HorizontalAlignment="Center" Margin="0,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <ProgressBar x:Name="pgbarr" Value="0" Maximum="100" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                                    <Label Content="Make" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                </Grid>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
 
                 </Grid>
