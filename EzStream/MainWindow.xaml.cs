@@ -97,7 +97,15 @@ namespace EzStream
         }
 
         private void btn3_Click(object sender, RoutedEventArgs e){
-            MessageBox.Show("Disabled");
+            if (MessageBox.Show("Sure you want to delete?? ", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes){ 
+                Button button = sender as Button;
+                Channel chn = button.DataContext as Channel;
+                DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + "/Data/");
+                FileInfo[] files = dir.GetFiles(chn.Channels + "*", SearchOption.AllDirectories);
+                foreach (var file in files)
+                    File.Delete(file.ToString());
+                this.lbox.Items.Remove(chn);
+            }
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e){
             string applicationLocation = Directory.GetCurrentDirectory() + "/EzStreaming.exe";
@@ -285,10 +293,8 @@ namespace EzStream
             }
         }
         #endregion
-        void Create_profile()
-        {
-            Dictionary<string, string> profile = new Dictionary<string, string>()
-            {
+        void Create_profile(){
+            Dictionary<string, string> profile = new Dictionary<string, string>(){
                 { "default_presets", default_presets.Text },
                 { "Name", Channel_Name.Text },
                 { "Platform", Plarfomr_sel.Text },
@@ -306,14 +312,12 @@ namespace EzStream
             }
         }
 
-        private void autostart_button_save_Click(object sender, RoutedEventArgs e)
-        {
+        private void autostart_button_save_Click(object sender, RoutedEventArgs e){
             using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/Channels.txt"))
                 tw.Write(tbMultiLine.Text);
         }
 
-        private void autostart_button_edit_Click(object sender, RoutedEventArgs e)
-        {
+        private void autostart_button_edit_Click(object sender, RoutedEventArgs e){
             if (tbMultiLine.Visibility == Visibility.Visible){
                 tbMultiLine.Visibility = Visibility.Hidden;
                 autostart_button_save.Visibility = Visibility.Hidden;
