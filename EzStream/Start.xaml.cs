@@ -27,8 +27,11 @@ namespace EzStreaming
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data");
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Video");
                 Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Audio");
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Channels");
                 File.Create(Directory.GetCurrentDirectory() + "/Data/Channels.txt").Dispose();
             }
+            if (!Directory.Exists(Directory.GetCurrentDirectory() + "/Data/Channels"))
+                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Channels");
             if (!File.Exists(Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe"))
                 using (WebClient wc = new WebClient())
                     wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe");

@@ -43,8 +43,11 @@ namespace EzStream
             InitializeComponent();
             AutoRun.IsChecked = EzStreaming.Properties.Settings.Default.AutoRun_bool;
             AutoRun2.IsChecked = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
-            if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool)
+            tbMultiLine.Text = File.ReadAllText(Directory.GetCurrentDirectory() + "/Data/Channels.txt");
+            if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
                 AutoRunChannels();
+                autostart_button_edit.Visibility = Visibility.Visible;
+            }
             GetChannels();
         }
 
@@ -69,6 +72,8 @@ namespace EzStream
             startInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "/Data/";
             startInfo.FileName = "cmd.exe";
             startInfo.Arguments = "/C" + $"taskkill /F /T /PID {CurrentStreaing[channel]}";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
             process.StartInfo = startInfo;
             process.Start();
             CurrentStreaing.Remove(channel);
@@ -112,11 +117,17 @@ namespace EzStream
         private void CheckBox_channels_Checked(object sender, RoutedEventArgs e){
             if (AutoRun2.IsChecked == true){
                 if (!EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
-                    Process.Start("notepad.exe", Directory.GetCurrentDirectory() + "/Data/Channels.txt");
+                   // Process.Start("notepad.exe", Directory.GetCurrentDirectory() + "/Data/Channels.txt");
                     EzStreaming.Properties.Settings.Default.AutoRunCh_bool = true;
+                    autostart_button_edit.Visibility = Visibility.Visible;
                 }
-            }else
+            }
+            else { 
                EzStreaming.Properties.Settings.Default.AutoRunCh_bool = false;
+                autostart_button_edit.Visibility = Visibility.Hidden;
+                tbMultiLine.Visibility = Visibility.Hidden;
+                autostart_button_save.Visibility = Visibility.Hidden;
+            }
             EzStreaming.Properties.Settings.Default.Save();
         }
         #region newuser
@@ -153,14 +164,22 @@ namespace EzStream
                     return "rtmp://a.rtmp.youtube.com/live2/";
                 case "Facebook":
                     return "rtmp://live-api-s.facebook.com:443/rtmp/";
+                case "Trovo":
+                    return "rtmp://livepush.trovo.live/live/";
                 default:
                     return "rtmp://live.twitch.tv/app/";
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e){
-            if (Channel_Name.Text != "Channel Name" && !Channel_Name.Text.Contains(" ") && stream_key.Text != "Stream_Key" && (bool)cb1.IsChecked){
+            var template = bgrided.Template;
+            var progressBar = (ProgressBar)template.FindName("pgbarr", bgrided);
+            progressBar.Foreground = new SolidColorBrush(Colors.Green);
+            if (Channel_Name.Text != "Channel Name" && !Channel_Name.Text.Contains(" ") && stream_key.Text != "Stream_Key" && (bool)cb1.IsChecked && !File.Exists(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat")){
+                progressBar.Value = 10;
                 Setvideo();
+                progressBar.Value = 20;
                 SetAudio();
+                progressBar.Value = 30;
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
                         if ((bool)cb2.IsChecked)
@@ -193,10 +212,17 @@ namespace EzStream
                             fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}");
                       break;
                 }
+                progressBar.Value = 40;
                 this.lbox.Items.Add(new Channel { Channels = Channel_Name.Text, start = "/data/1.png" });
-                MessageBox.Show("Done");
-            }else
-                MessageBox.Show("Please set correct values");
+                progressBar.Value = 50;
+                Create_profile();
+                progressBar.Value = 100;
+            }
+            else { 
+                //MessageBox.Show("Please set correct values");
+                progressBar.Foreground = new SolidColorBrush(Colors.Red);
+                progressBar.Value = 100;
+            }
         }
         void Setvideo(){
             if (System.IO.Path.GetExtension(video) != ".gif")
@@ -259,5 +285,43 @@ namespace EzStream
             }
         }
         #endregion
+        void Create_profile()
+        {
+            Dictionary<string, string> profile = new Dictionary<string, string>()
+            {
+                { "default_presets", default_presets.Text },
+                { "Name", Channel_Name.Text },
+                { "Platform", Plarfomr_sel.Text },
+                { "FPS", fps.Text },
+                { "Codec", Codec_sel.Text },
+                { "StreamKey", stream_key.Text },
+                { "Bittrate", bittrate.Text },
+                { "Preset", Preset.Text }
+            };
+            File.Create(Directory.GetCurrentDirectory() + "/Data/Channels/" + Channel_Name.Text + ".dic").Dispose();
+            using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/Channels/" + Channel_Name.Text + ".dic"))
+            {
+                foreach (var entry in profile)
+                    tw.WriteLine("[{0}: {1}]", entry.Key, entry.Value);
+            }
+        }
+
+        private void autostart_button_save_Click(object sender, RoutedEventArgs e)
+        {
+            using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/Channels.txt"))
+                tw.Write(tbMultiLine.Text);
+        }
+
+        private void autostart_button_edit_Click(object sender, RoutedEventArgs e)
+        {
+            if (tbMultiLine.Visibility == Visibility.Visible){
+                tbMultiLine.Visibility = Visibility.Hidden;
+                autostart_button_save.Visibility = Visibility.Hidden;
+            }
+            else{
+                tbMultiLine.Visibility = Visibility.Visible;
+                autostart_button_save.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

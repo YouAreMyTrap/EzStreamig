@@ -1,0 +1,8 @@
+[default_presets: ]
+[Name: 4f]
+[Platform: Twitch]
+[FPS: 30]
+[Codec: h264_nvenc]
+[StreamKey: Stream_sad]
+[Bittrate: 1000k]
+[Preset: medium]

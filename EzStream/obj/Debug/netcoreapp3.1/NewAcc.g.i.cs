@@ -117,7 +117,7 @@ namespace EzStream {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.3.1;component/newacc.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.3.3;component/newacc.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\NewAcc.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

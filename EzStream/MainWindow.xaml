@@ -38,7 +38,11 @@
             </TabItem>
             <TabItem Header="New User" Height="20" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5">
-                    <Canvas x:Name="Custom" Margin="0,38,0,56">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="136*"/>
+                        <ColumnDefinition Width="499*"/>
+                    </Grid.ColumnDefinitions>
+                    <Canvas x:Name="Custom" Margin="0,38,0,56" Grid.ColumnSpan="2">
                         <TextBlock Text="Chanel Name" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="4"/>
                         <TextBox x:Name="Channel_Name" Text="Channel Name" TextWrapping="Wrap" Width="322" Height="37" FontWeight="Normal" FontSize="18" Canvas.Left="30" Canvas.Top="20" TextAlignment="Left" Cursor=""/>
 
@@ -56,6 +60,7 @@
                                 <ComboBoxItem IsSelected="True" Content="Twitch"/>
                                 <ComboBoxItem Content="Youtube"/>
                                 <ComboBoxItem Content="Facebook"/>
+                                <ComboBoxItem Content="Trovo"/>
                                 <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                             </ComboBox>
 
@@ -90,7 +95,7 @@
                         </ComboBox>
                     </Canvas>
 
-                    <ComboBox x:Name="default_presets" HorizontalAlignment="Center" Margin="0,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed">
+                    <ComboBox x:Name="default_presets" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed" Grid.ColumnSpan="2">
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU AMD"/>
@@ -99,7 +104,7 @@
                         <ComboBoxItem Content="CPU"/>
                         <ComboBoxItem IsSelected="True" Content="Custom"/>
                     </ComboBox>
-                    <Button Grid.Column="0" HorizontalAlignment="Center" Margin="0,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click">
+                    <Button x:Name="bgrided" Grid.Column="1" HorizontalAlignment="Left" Margin="30,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
@@ -114,7 +119,7 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="Options">
+            <TabItem Header="Options" HorizontalAlignment="Left" Width="54">
                 <Grid Background="#FFE5E5E5">
                     <CheckBox x:Name="AutoRun" Content="Auto Run EzStreaming" HorizontalAlignment="Left" Margin="23,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
                     <CheckBox x:Name="AutoRun2" Content="Auto Run Channels" HorizontalAlignment="Left" Margin="23,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_channels_Checked" Unchecked="CheckBox_channels_Checked"/>
@@ -129,6 +134,10 @@
                         </TextBlock.RenderTransform>
                     </TextBlock>
                     <Label Content="Donations:" HorizontalAlignment="Left" Margin="25,166,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+
+                    <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="585" RenderTransformOrigin="-0.25,-0.198" Visibility="Hidden" Click="autostart_button_edit_Click"/>
+                    <TextBox HorizontalAlignment="Center" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="0,83,0,0" Text="Channel1" VerticalAlignment="Top" Width="586" Height="263" Visibility="Hidden"/>
+                    <Button x:Name="autostart_button_edit" Content="" HorizontalAlignment="Left" Margin="168,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.453" Height="15" Width="23" Click="autostart_button_edit_Click" Visibility="Hidden"/>
 
                 </Grid>
             </TabItem>

@@ -16,3 +16,5 @@ EzStream/obj/Debug/netcoreapp3.1/NewAcc.baml
 EzStream/obj/Debug/netcoreapp3.1/NewAcc.g.cs
 EzStream/obj/Debug/netcoreapp3.1/Start.baml
 EzStream/obj/Debug/netcoreapp3.1/Start.g.cs
+*.mp4
+*.bat
