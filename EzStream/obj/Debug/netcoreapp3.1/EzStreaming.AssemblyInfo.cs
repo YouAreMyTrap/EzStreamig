@@ -13,11 +13,11 @@ using System.Reflection;
 
 [assembly: System.Reflection.AssemblyCompanyAttribute("EzStreaming")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("2.0.3.3")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.3.3")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("2.0.3.4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.0.3.4")]
 [assembly: System.Reflection.AssemblyProductAttribute("EzStreaming")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EzStreaming")]
-[assembly: System.Reflection.AssemblyVersionAttribute("2.0.3.3")]
+[assembly: System.Reflection.AssemblyVersionAttribute("2.0.3.4")]
 
 // Generado por la clase WriteCodeFragment de MSBuild.
 

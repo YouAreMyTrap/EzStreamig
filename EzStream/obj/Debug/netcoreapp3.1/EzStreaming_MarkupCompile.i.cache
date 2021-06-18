@@ -1,5 +1,5 @@
 ﻿EzStreaming
-2.0.3.3
+2.0.3.4
 
 winexe
 C#
@@ -16,5 +16,5 @@ C:\Users\Pink\Documents\EzStreamig\EzStream\App.xaml
 193-273839261
 MainWindow.xaml;NewAcc.xaml;Start.xaml;
 
-False
+True
 
