@@ -33,11 +33,9 @@ namespace EzStream
         private string video = "";
         private string audio = "";
 
-        void GetChannels()
-        {
-            foreach(string x in vs)
-                this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" });
-        }
+        void GetChannels() => Array.ForEach(vs, x => this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" }));
+            //foreach (string x in vs)
+              //  this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" });
 
         public MainWindow()
         {
@@ -82,8 +80,9 @@ namespace EzStream
         }
         private void AutoRunChannels(){
             ChannelsAutoRun = File.ReadAllLines(Directory.GetCurrentDirectory() + "/Data/Channels.txt").ToList();
-            foreach (string x in ChannelsAutoRun)
-                LoadStream(x);
+            ChannelsAutoRun.ForEach(x => LoadStream(x));
+            //foreach (string x in ChannelsAutoRun)
+              //  LoadStream(x);
         }
         private void LoadStream(string channel){
             System.Diagnostics.Process process = new System.Diagnostics.Process();
@@ -103,16 +102,14 @@ namespace EzStream
                 Channel chn = button.DataContext as Channel;
                 DirectoryInfo dir = new DirectoryInfo(Directory.GetCurrentDirectory() + "/Data/");
                 FileInfo[] files = dir.GetFiles(chn.Channels + "*", SearchOption.AllDirectories);
-                foreach (var file in files)
-                    File.Delete(file.ToString());
+                Array.ForEach(files, file => File.Delete(file.ToString()));
                 this.lbox.Items.Remove(chn);
             }
         }
         private void CheckBox_Checked(object sender, RoutedEventArgs e){
-            string applicationLocation = Directory.GetCurrentDirectory() + "/EzStreaming.exe";
             RegistryKey reg = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            if(AutoRun.IsChecked == true){ 
-                reg.SetValue("EzStream", applicationLocation);
+            if((bool)AutoRun.IsChecked){ 
+                reg.SetValue("EzStream", Directory.GetCurrentDirectory() + "/EzStreaming.exe");
                 EzStreaming.Properties.Settings.Default.AutoRun_bool = true;
             }
             else{
@@ -124,7 +121,7 @@ namespace EzStream
         }
 
         private void CheckBox_channels_Checked(object sender, RoutedEventArgs e){
-            if (AutoRun2.IsChecked == true){
+            if ((bool)AutoRun2.IsChecked){
                 if (!EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
                    // Process.Start("notepad.exe", Directory.GetCurrentDirectory() + "/Data/Channels.txt");
                     EzStreaming.Properties.Settings.Default.AutoRunCh_bool = true;
@@ -159,12 +156,8 @@ namespace EzStream
             }else
                 cb2.IsChecked = false;
         }
-        private void CheckBox_video_unchecked(object sender, RoutedEventArgs e){
-            cb1.Content = "Video";
-        }
-        private void CheckBox_audio_unchecked(object sender, RoutedEventArgs e){
-            cb2.Content = "Audio";
-        }
+        private void CheckBox_video_unchecked(object sender, RoutedEventArgs e) => cb1.Content = "Video";
+        private void CheckBox_audio_unchecked(object sender, RoutedEventArgs e) => cb2.Content = "Audio";
         string GetPlatform(string name){
             switch (name){
                 case "Twitch":
@@ -243,9 +236,7 @@ namespace EzStream
                 progressBar.Foreground = new SolidColorBrush(Colors.Yellow);
                 var FileDestination = new FileInfo(Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
                 var FileSource = new FileInfo(video);
-                Task.Run(() => {
-                    FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));
-                }).GetAwaiter();
+                Task.Run(() => {FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));}).GetAwaiter();
             }
             else
             { //Convert gif to mp4 for suport on ffmpeg
@@ -270,9 +261,7 @@ namespace EzStream
                 progressBar.Foreground = new SolidColorBrush(Colors.YellowGreen);
                 var FileDestination = new FileInfo(Directory.GetCurrentDirectory() + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
                 var FileSource = new FileInfo(audio);
-                Task.Run(() => {
-                    FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));
-                }).GetAwaiter();
+                Task.Run(() => {FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));}).GetAwaiter();
             }
         }
         
@@ -339,7 +328,8 @@ namespace EzStream
             }
         }
 
-        private void autostart_button_save_Click(object sender, RoutedEventArgs e){
+        private void autostart_button_save_Click(object sender, RoutedEventArgs e)
+        {
             using (TextWriter tw = new StreamWriter(Directory.GetCurrentDirectory() + "/Data/Channels.txt"))
                 tw.Write(tbMultiLine.Text);
         }
