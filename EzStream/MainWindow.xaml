@@ -95,13 +95,14 @@
                         </ComboBox>
                     </Canvas>
 
-                    <ComboBox x:Name="default_presets" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed" Grid.ColumnSpan="2">
+                    <ComboBox x:Name="default_presets" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU AMD"/>
-                        <ComboBoxItem Content="GPU NVIDEA"/>
-                        <ComboBoxItem Content="GPU AMD"/>
-                        <ComboBoxItem Content="CPU"/>
+                        <ComboBoxItem Content="autoStreamerv2 - Grand Bob"/>
+                        <ComboBoxItem Content="GPU NVIDEA" IsEnabled="False"/>
+                        <ComboBoxItem Content="GPU AMD" IsEnabled="False"/>
+                        <ComboBoxItem Content="CPU" IsEnabled="False"/>
                         <ComboBoxItem IsSelected="True" Content="Custom"/>
                     </ComboBox>
                     <Button x:Name="bgrided" Grid.Column="1" HorizontalAlignment="Left" Margin="30,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click">

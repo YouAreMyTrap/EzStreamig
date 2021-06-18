@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System.Diagnostics;
 using System.Net;
 using AutoUpdaterDotNET;
+using EzStreaming;
 
 namespace EzStream
 {
@@ -184,10 +185,11 @@ namespace EzStream
             progressBar.Foreground = new SolidColorBrush(Colors.Green);
             if (Channel_Name.Text != "Channel Name" && !Channel_Name.Text.Contains(" ") && stream_key.Text != "Stream_Key" && (bool)cb1.IsChecked && !File.Exists(Directory.GetCurrentDirectory() + "/Data/" + Channel_Name.Text + ".bat")){
                 progressBar.Value = 10;
-                Setvideo();
+                Setvideo(progressBar);
                 progressBar.Value = 20;
-                SetAudio();
+                SetAudio(progressBar);
                 progressBar.Value = 30;
+                progressBar.Foreground = new SolidColorBrush(Colors.Green);
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
                         if ((bool)cb2.IsChecked)
@@ -206,6 +208,9 @@ namespace EzStream
                             fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
                         else
                             fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                      break;
+                    case "autoStreamerv2 - Grand Bob":
+                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -codec:v libx264 -pix_fmt yuv420p -preset veryfast -b:v 400k -g 10.0 -codec:a aac -b:a 96k -ar 44100 -maxrate 400k -bufsize 200k -strict experimental -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
                       break;
                     case "GPU NVIDEA":
                       break;
@@ -232,10 +237,18 @@ namespace EzStream
                 progressBar.Value = 100;
             }
         }
-        void Setvideo(){
-            if (System.IO.Path.GetExtension(video) != ".gif")
-                File.Copy(video, Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
-            else{ //Convert gif to mp4 for suport on ffmpeg
+        void Setvideo(ProgressBar progressBar)
+        {
+            if (System.IO.Path.GetExtension(video) != ".gif") {
+                progressBar.Foreground = new SolidColorBrush(Colors.Yellow);
+                var FileDestination = new FileInfo(Directory.GetCurrentDirectory() + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
+                var FileSource = new FileInfo(video);
+                Task.Run(() => {
+                    FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));
+                }).GetAwaiter();
+            }
+            else
+            { //Convert gif to mp4 for suport on ffmpeg
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
@@ -250,10 +263,17 @@ namespace EzStream
                 process.WaitForExit();
             }
         }
-        void SetAudio(){
+        void SetAudio(ProgressBar progressBar)
+        {
             //copy music to folder music
-            if ((bool)cb2.IsChecked)
-                File.Copy(audio, Directory.GetCurrentDirectory() + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
+            if ((bool)cb2.IsChecked) { 
+                progressBar.Foreground = new SolidColorBrush(Colors.YellowGreen);
+                var FileDestination = new FileInfo(Directory.GetCurrentDirectory() + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
+                var FileSource = new FileInfo(audio);
+                Task.Run(() => {
+                    FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));
+                }).GetAwaiter();
+            }
         }
         
         void fabric(string input)
@@ -264,12 +284,15 @@ namespace EzStream
                 tw.WriteLine("Title " + Channel_Name.Text);
                 tw.WriteLine("mode con:lines=1");
                 tw.WriteLine("color 5A");
+                tw.WriteLine(":start");
                 tw.WriteLine(input);
+                tw.WriteLine("goto start");
             }
         }
         private void default_presets_DropDownClosed(object sender, EventArgs e){
             Custom.Visibility = Visibility.Hidden;
             extra.Visibility = Visibility.Hidden;
+            cb2.Visibility = Visibility.Visible;
             switch (default_presets.Text){
                 case "MusicStreamer/MassStreamer by viri":
                     Custom.Visibility = Visibility.Visible;
@@ -279,6 +302,10 @@ namespace EzStream
                     break;
                 case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
                     Custom.Visibility = Visibility.Visible;
+                    break;
+                case "autoStreamerv2 - Grand Bob":
+                    Custom.Visibility = Visibility.Visible;
+                    cb2.Visibility = Visibility.Hidden;
                     break;
                 case "GPU NVIDEA":
                     break;
