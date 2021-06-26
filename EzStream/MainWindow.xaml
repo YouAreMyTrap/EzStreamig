@@ -11,7 +11,13 @@
         <TabControl>
             <TabItem Header="Main">
                 <Grid Background="#FFE5E5E5">
-                    <ListBox x:Name="lbox" HorizontalContentAlignment="Stretch" Margin="21,45,10,24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="67*"/>
+                        <ColumnDefinition Width="23*"/>
+                        <ColumnDefinition Width="48*"/>
+                        <ColumnDefinition Width="497*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox x:Name="lbox" HorizontalContentAlignment="Stretch" Margin="21,45,10,24" Grid.ColumnSpan="4">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,0">
@@ -33,10 +39,10 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Label Content="Channel Name" HorizontalAlignment="Left" Margin="21,19,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Channel Name" HorizontalAlignment="Left" Margin="21,19,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="New User" Height="20" VerticalAlignment="Top">
+            <TabItem Header="New User">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="136*"/>
@@ -70,8 +76,8 @@
                                 <ComboBoxItem Content="libx264"/>
                             </ComboBox>
 
-                            <TextBlock Text="Preset" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="168"/>
-                            <ComboBox x:Name="Preset" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="380" Canvas.Top="184" IsEnabled="False">
+                            <TextBlock Text="Preset" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="203"/>
+                            <ComboBox x:Name="Preset" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="220" IsEnabled="False">
                                 <ComboBoxItem Content="ultrafast"/>
                                 <ComboBoxItem Content="superfast"/>
                                 <ComboBoxItem Content="veryfast"/>
@@ -85,14 +91,16 @@
                             </ComboBox>
                         </Canvas>
                         <CheckBox x:Name="cb1" Content="Video" Height="20" Width="322" Checked="CheckBox_video_Checked" Unchecked="CheckBox_video_unchecked" Canvas.Left="380" Canvas.Top="18"/>
-                        <CheckBox x:Name="cb2" Content="Audio" Height="23" Width="322" Checked="CheckBox_audio_Checked" Unchecked="CheckBox_audio_unchecked" Canvas.Left="380" Canvas.Top="50"/>
-                        <TextBlock Text="Resolution" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="110"/>
-                        <ComboBox x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="126">
+                        <CheckBox x:Name="cb2" Content="Audio" Height="24" Width="322" Checked="CheckBox_audio_Checked" Unchecked="CheckBox_audio_unchecked" Canvas.Left="380" Canvas.Top="92"/>
+                        <TextBlock Text="Resolution" TextWrapping="Wrap" Canvas.Left="380" Canvas.Top="150"/>
+                        <ComboBox x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="380" Canvas.Top="166">
                             <ComboBoxItem Content="1920:1080"/>
                             <ComboBoxItem IsSelected="True" Content="1280:720"/>
                             <ComboBoxItem Content="640:480"/>
                             <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                         </ComboBox>
+                        <CheckBox x:Name="ytvideo" Content="Youtube Video" Height="20" Width="322" Checked="ytvideo_Checked" Unchecked="ytvideo_unchecked" Canvas.Left="380" Canvas.Top="43"/>
+                        <CheckBox x:Name="ytaudio" Content="Youtube Audio" Height="20" Width="322" Checked="ytaudio_Checked" Unchecked="ytaudio_unchecked" Canvas.Left="380" Canvas.Top="116" Visibility="Hidden"/>
                     </Canvas>
 
                     <ComboBox x:Name="default_presets" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
@@ -115,12 +123,14 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <TextBox x:Name="ytlink_video" HorizontalAlignment="Left" Margin="250,101,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
+                    <TextBox x:Name="ytlink_audio" HorizontalAlignment="Left" Margin="250,171,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
 
 
                 </Grid>
 
             </TabItem>
-            <TabItem Header="Options" HorizontalAlignment="Left" Width="54">
+            <TabItem Header="Options" HorizontalAlignment="Center" Width="54" Height="20" VerticalAlignment="Top">
                 <Grid Background="#FFE5E5E5">
                     <CheckBox x:Name="AutoRun" Content="Auto Run EzStreaming" HorizontalAlignment="Left" Margin="23,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
                     <CheckBox x:Name="AutoRun2" Content="Auto Run Channels" HorizontalAlignment="Left" Margin="23,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_channels_Checked" Unchecked="CheckBox_channels_Checked"/>
@@ -139,6 +149,7 @@
                     <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="585" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click"/>
                     <TextBox HorizontalAlignment="Center" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="0,83,0,0" Text="Channel1" VerticalAlignment="Top" Width="586" Height="263" Visibility="Hidden"/>
                     <Button x:Name="autostart_button_edit" Content="" HorizontalAlignment="Left" Margin="168,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.453" Height="15" Width="23" Click="autostart_button_edit_Click" Visibility="Hidden"/>
+                    <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="432,16,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
 
                 </Grid>
             </TabItem>

@@ -1,5 +1,5 @@
 ﻿EzStreaming
-2.0.3.4
+2.0.4.0
 
 winexe
 C#
@@ -10,11 +10,11 @@ none
 false
 TRACE;RELEASE;NETCOREAPP;NETCOREAPP3_1;
 C:\Users\Pink\Documents\EzStreamig\EzStream\App.xaml
-3-199097604
+4759740135
 
-10-1934818856
-193-273839261
-MainWindow.xaml;NewAcc.xaml;Start.xaml;
+11-1815303203
+199-1634249896
+MainWindow.xaml;NewAcc.xaml;Start.xaml;YouTubeDownloaderWindows.xaml;
 
-True
+False
 

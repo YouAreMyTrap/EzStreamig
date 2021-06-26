@@ -53,7 +53,7 @@ namespace EzStreaming {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.3.4;component/start.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.4.0;component/start.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Start.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

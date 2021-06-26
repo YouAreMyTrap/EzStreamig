@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Net;
 using AutoUpdaterDotNET;
-
+using System.Reflection;
 
 namespace EzStreaming
 {
@@ -22,19 +22,22 @@ namespace EzStreaming
     /// </summary>
     public partial class Start : Window{
         public Start(){
-
-            if (!Directory.Exists(Directory.GetCurrentDirectory() + "/Data")){
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data");
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Video");
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Audio");
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Channels");
-                File.Create(Directory.GetCurrentDirectory() + "/Data/Channels.txt").Dispose();
+            //MessageBox.Show(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            string dir = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            if (!Directory.Exists(dir + "/Data")){
+                Directory.CreateDirectory(dir + "/Data");
+                Directory.CreateDirectory(dir + "/Data/Video");
+                Directory.CreateDirectory(dir + "/Data/Audio");
+                Directory.CreateDirectory(dir + "/Data/Channels");
+                File.Create(dir + "/Data/Channels.txt").Dispose();
             }
-            if (!Directory.Exists(Directory.GetCurrentDirectory() + "/Data/Channels"))
-                Directory.CreateDirectory(Directory.GetCurrentDirectory() + "/Data/Channels");
-            if (!File.Exists(Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe"))
-                using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), Directory.GetCurrentDirectory() + "/Data/ffmpeg.exe");
+            if (!Directory.Exists(dir + "/Data/Channels"))
+                Directory.CreateDirectory(dir + "/Data/Channels");
+            if (!File.Exists(dir + "/Data/ffmpeg.exe"))
+                using (WebClient wc = new WebClient()) { 
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), dir + "/Data/ffmpeg.exe");
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl"), dir + "/Data/youtube-dl.exe");
+                }
 
             AutoUpdater.Start("https://github.com/YouAreMyTrap/EzStreamig/raw/main/update.xml");
             MainWindow win2 = new MainWindow();

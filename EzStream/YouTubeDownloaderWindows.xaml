@@ -1,0 +1,87 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EzStreaming"
+        xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="EzStreaming.YouTubeDownloaderWindows"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        Title="EzStreaming 2.1 - beta | YouTube Downlaoder" Height="361" Width="424" Loaded="App_load" Closing="Windows_Closed">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="76*"/>
+            <ColumnDefinition Width="186*"/>
+            <ColumnDefinition Width="33*"/>
+            <ColumnDefinition Width="106*"/>
+            <ColumnDefinition Width="23*"/>
+        </Grid.ColumnDefinitions>
+        <TextBox x:Name="ytlink" HorizontalAlignment="Left" Margin="50,39,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Grid.ColumnSpan="4" Height="34" KeyUp="linkyt_keyup"/>
+        <ComboBox x:Name="settings_video" HorizontalAlignment="Left" Margin="50,87,0,0" VerticalAlignment="Top" Width="61" Grid.ColumnSpan="2">
+            <ComboBoxItem Content="Auto" IsSelected="True"/>
+            <ComboBoxItem Content="mp4"/>
+            <ComboBoxItem Content="mkv"/>
+            <ComboBoxItem Content="m4a"/>
+            <ComboBoxItem Content="webm"/>
+        </ComboBox>
+        <ComboBox x:Name="settings_audio" HorizontalAlignment="Left" Margin="71,87,0,0" VerticalAlignment="Top" Width="234" Grid.ColumnSpan="3" Grid.Column="1">
+            <ComboBoxItem Content="Auto" IsSelected="True"/>
+            <ComboBoxItem Content="bestvideo+bestaudio/best"/>
+            <ComboBoxItem Content="bestvideo+bestaudio"/>
+            <ComboBoxItem Content="bestvideo+worstaudio"/>
+            <ComboBoxItem Content="worstvideo+bestaudio"/>
+            <ComboBoxItem Content="worstvideo+worstaudio"/>
+            <ComboBoxItem Content="worstvideo+worstaudio/worst"/>
+            <ComboBoxItem Content="best"/>
+            <ComboBoxItem Content="worst"/>
+            <ComboBoxItem Content="bestvideo"/>
+            <ComboBoxItem Content="worstvideo"/>
+            <ComboBoxItem Content="bestaudio"/>
+            <ComboBoxItem Content="worstaudio"/>
+            <ComboBoxItem Content="YouTube 4K 60fps HDR AV1 + Opus WebM (701+251)"/>
+            <ComboBoxItem Content="YouTube 4K 60fps HDR VP9 + Opus WebM (337+251)"/>
+            <ComboBoxItem Content="YouTube 4K 60fps AV1 + Opus WebM (401+251)"/>
+            <ComboBoxItem Content="YouTube 4K 60fps VP9 + Opus WebM (315+251)"/>
+            <ComboBoxItem Content="YouTube 4K AV1 + Opus WebM (401+251)"/>
+            <ComboBoxItem Content="YouTube 4K VP9 + Opus WebM (313+251)"/>
+            <ComboBoxItem Content="YouTube 1440p60 HDR AV1 + Opus WebM (700+251)"/>
+            <ComboBoxItem Content="YouTube 1440p60 HDR VP9 + Opus WebM (336+251)"/>
+            <ComboBoxItem Content="YouTube 1440p60 AV1 + Opus WebM (400+251)"/>
+            <ComboBoxItem Content="YouTube 1440p60 VP9 + Opus WebM (308+251)"/>
+            <ComboBoxItem Content="YouTube 1440p AV1 + Opus WebM (400+251)"/>
+            <ComboBoxItem Content="YouTube 1440p VP9 + Opus WebM (271+251)"/>
+            <ComboBoxItem Content="YouTube 1080p60 AV1 + Opus WebM (399+251)"/>
+            <ComboBoxItem Content="YouTube 1080p60 VP9 + Opus WebM (303+251)"/>
+            <ComboBoxItem Content="YouTube 1080p60 AVC + AAC MP4 (299+140)"/>
+            <ComboBoxItem Content="YouTube 1080p AV1 + Opus WebM (399+251)"/>
+            <ComboBoxItem Content="YouTube 1080p VP9 + Opus WebM (248+251)"/>
+            <ComboBoxItem Content="YouTube 1080p AVC + AAC MP4 (137+140)"/>
+            <ComboBoxItem Content="YouTube 720p60 AV1 + Opus WebM (398+251)"/>
+            <ComboBoxItem Content="YouTube 720p60 VP9 + Opus WebM (302+251)"/>
+            <ComboBoxItem Content="YouTube 720p60 AVC + AAC MP4 (298+140)"/>
+            <ComboBoxItem Content="YouTube 720p AV1 + Opus WebM (398+251)"/>
+            <ComboBoxItem Content="YouTube 720p VP9 + Opus WebM (247+251)"/>
+            <ComboBoxItem Content="YouTube 720p AVC + AAC (136+140)"/>
+            <ComboBoxItem Content="1080p"/>
+            <ComboBoxItem Content="720p"/>
+        </ComboBox>
+        <Button x:Name="bgrided" HorizontalAlignment="Left" Margin="46,126,0,0" VerticalAlignment="Top" Height="41" Width="332" Click="Button_Click" Grid.ColumnSpan="4">
+            <Button.Template>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid>
+                        <ProgressBar x:Name="pgbarr" Value="0" Maximum="100" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ValueChanged="pgbarr_ValueChanged"/>
+                        <Label Content="Downlaod" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Label Content="Only Video" HorizontalAlignment="Left" Margin="26,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="resultTextBox"
+                 Margin="50,172,20,8"
+                 TextWrapping="NoWrap"
+                 IsReadOnly="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"
+                 Cursor="IBeam" Grid.ColumnSpan="4"/>
+    </Grid>
+</Window>

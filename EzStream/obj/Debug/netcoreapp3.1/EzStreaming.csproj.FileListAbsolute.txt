@@ -92,3 +92,14 @@ C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\EzStreaming.
 C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\EzStreaming.dll
 C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\EzStreaming.pdb
 C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\EzStreaming.genruntimeconfig.cache
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\Interop.Shell32.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\Interop.IWshRuntimeLibrary.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\Interop.Shell32.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\Interop.IWshRuntimeLibrary.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\EzStreaming.csproj.ResolveComReference.cache
+C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\YouTubeDownloaderWindows.g.cs
+C:\Users\Pink\Documents\EzStreamig\EzStream\obj\Debug\netcoreapp3.1\YouTubeDownloaderWindows.baml
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\AngleSharp.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\YoutubeExplode.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\Pink\Documents\EzStreamig\EzStream\bin\Debug\netcoreapp3.1\libvideo.dll
