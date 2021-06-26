@@ -46,5 +46,17 @@ namespace EzStreaming.Properties {
                 this["AutoRunCh_bool"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool StartVery {
+            get {
+                return ((bool)(this["StartVery"]));
+            }
+            set {
+                this["StartVery"] = value;
+            }
+        }
     }
 }

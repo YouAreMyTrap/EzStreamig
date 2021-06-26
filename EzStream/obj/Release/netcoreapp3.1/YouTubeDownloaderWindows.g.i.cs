@@ -93,7 +93,7 @@ namespace EzStreaming {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.4.0;component/youtubedownloaderwindows.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/EzStreaming;V2.0.4.1;component/youtubedownloaderwindows.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\YouTubeDownloaderWindows.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

@@ -150,6 +150,8 @@
                     <TextBox HorizontalAlignment="Center" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="0,83,0,0" Text="Channel1" VerticalAlignment="Top" Width="586" Height="263" Visibility="Hidden"/>
                     <Button x:Name="autostart_button_edit" Content="" HorizontalAlignment="Left" Margin="168,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.453" Height="15" Width="23" Click="autostart_button_edit_Click" Visibility="Hidden"/>
                     <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="432,16,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
+                    <CheckBox x:Name="StartVerify" Content="Verify update on start?" HorizontalAlignment="Left" Margin="189,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="StartVerify_Checked" Unchecked="StartVerify_Checked"/>
+                    <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="432,41,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
 
                 </Grid>
             </TabItem>

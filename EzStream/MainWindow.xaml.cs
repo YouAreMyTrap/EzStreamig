@@ -42,6 +42,7 @@ namespace EzStream
         {
             InitializeComponent();
             AutoRun.IsChecked = EzStreaming.Properties.Settings.Default.AutoRun_bool;
+            StartVerify.IsChecked = EzStreaming.Properties.Settings.Default.StartVery;
             AutoRun2.IsChecked = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
             tbMultiLine.Text = File.ReadAllText(dir + "/Data/Channels.txt");
             if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
@@ -400,7 +401,7 @@ namespace EzStream
             {
                 File.Delete(dir + "/Data/youtube-dl.exe");
                 using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl"), dir + "/Data/youtube-dl");
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
             }
             //CreateMD5("");
         }
@@ -422,5 +423,17 @@ namespace EzStream
                 return sb.ToString();
             }
         }
+
+        private void StartVerify_Checked(object sender, RoutedEventArgs e)
+        {
+            //MessageBox.Show(StartVerify.IsChecked.ToString());
+            EzStreaming.Properties.Settings.Default.StartVery = (bool)StartVerify.IsChecked;
+        }
+
+        private void CheckUpdates_Click(object sender, RoutedEventArgs e)
+        {
+            AutoUpdater.Start("https://github.com/YouAreMyTrap/EzStreamig/raw/main/update.xml");
+        }
     }
 }
+
