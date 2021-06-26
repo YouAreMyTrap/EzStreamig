@@ -79,7 +79,7 @@ namespace EzStreaming
             //ytProces.StartInfo.ArgumentList.Add($"{settings_video.Text}");
             //ytProces.StartInfo.ArgumentList.Add("--no-playlist");
             ///ytProces.StartInfo.ArgumentList.Add($"{"https://www.youtube.com/watch?v=mIccAO74CKE"}");
-            ytProces.StartInfo.ArgumentList.Add($"/C youtube-dl.exe {check_format} -f mp4 --no-playlist -o {file} {""} https://www.youtube.com/watch?v=8E000zu8UhQ");
+            ytProces.StartInfo.ArgumentList.Add($"/C youtube-dl.exe {check_format} -f mp4 --no-playlist -o {file} {ytlink.Text}");
 
             ytProces.Start();
             ytProces.BeginErrorReadLine();

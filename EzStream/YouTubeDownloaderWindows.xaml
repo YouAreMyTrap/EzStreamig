@@ -17,7 +17,7 @@
             <ColumnDefinition Width="23*"/>
         </Grid.ColumnDefinitions>
         <TextBox x:Name="ytlink" HorizontalAlignment="Left" Margin="50,39,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Grid.ColumnSpan="4" Height="34" KeyUp="linkyt_keyup"/>
-        <ComboBox x:Name="settings_video" HorizontalAlignment="Left" Margin="50,87,0,0" VerticalAlignment="Top" Width="61" Grid.ColumnSpan="2">
+        <ComboBox x:Name="settings_video" HorizontalAlignment="Left" Margin="50,87,0,0" VerticalAlignment="Top" Width="61" Grid.ColumnSpan="2" Visibility="Hidden">
             <ComboBoxItem Content="Auto" IsSelected="True"/>
             <ComboBoxItem Content="mp4"/>
             <ComboBoxItem Content="mkv"/>
