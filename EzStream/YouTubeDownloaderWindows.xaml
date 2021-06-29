@@ -7,16 +7,9 @@
         xmlns:System="clr-namespace:System;assembly=System.Runtime" x:Class="EzStreaming.YouTubeDownloaderWindows"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="EzStreaming 2.1 - beta | YouTube Downlaoder" Height="361" Width="424" Loaded="App_load" Closing="Windows_Closed">
+        Title="EzStreaming 2.1 - beta | YouTube Downlaoder" Height="361" Width="405" Loaded="App_load" Closing="Windows_Closed">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="76*"/>
-            <ColumnDefinition Width="186*"/>
-            <ColumnDefinition Width="33*"/>
-            <ColumnDefinition Width="106*"/>
-            <ColumnDefinition Width="23*"/>
-        </Grid.ColumnDefinitions>
-        <TextBox x:Name="ytlink" HorizontalAlignment="Left" Margin="50,39,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Grid.ColumnSpan="4" Height="34" KeyUp="linkyt_keyup"/>
+        <TextBox x:Name="ytlink" HorizontalAlignment="Left" Margin="38,39,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="331" Grid.ColumnSpan="4" Height="34" KeyUp="linkyt_keyup"/>
         <ComboBox x:Name="settings_video" HorizontalAlignment="Left" Margin="50,87,0,0" VerticalAlignment="Top" Width="61" Grid.ColumnSpan="2" Visibility="Hidden">
             <ComboBoxItem Content="Auto" IsSelected="True"/>
             <ComboBoxItem Content="mp4"/>
@@ -24,7 +17,7 @@
             <ComboBoxItem Content="m4a"/>
             <ComboBoxItem Content="webm"/>
         </ComboBox>
-        <ComboBox x:Name="settings_audio" HorizontalAlignment="Left" Margin="71,87,0,0" VerticalAlignment="Top" Width="234" Grid.ColumnSpan="3" Grid.Column="1">
+        <ComboBox x:Name="settings_audio" HorizontalAlignment="Left" Margin="38,87,0,0" VerticalAlignment="Top" Width="331" Grid.ColumnSpan="4">
             <ComboBoxItem Content="Auto" IsSelected="True"/>
             <ComboBoxItem Content="bestvideo+bestaudio/best"/>
             <ComboBoxItem Content="bestvideo+bestaudio"/>
@@ -65,7 +58,7 @@
             <ComboBoxItem Content="1080p"/>
             <ComboBoxItem Content="720p"/>
         </ComboBox>
-        <Button x:Name="bgrided" HorizontalAlignment="Left" Margin="46,126,0,0" VerticalAlignment="Top" Height="41" Width="332" Click="Button_Click" Grid.ColumnSpan="4">
+        <Button x:Name="bgrided" HorizontalAlignment="Left" Margin="38,126,0,0" VerticalAlignment="Top" Height="41" Width="332" Click="Button_Click" Grid.ColumnSpan="4">
             <Button.Template>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Grid>
@@ -75,13 +68,12 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
-        <Label Content="Only Video" HorizontalAlignment="Left" Margin="26,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <TextBox x:Name="resultTextBox"
-                 Margin="50,172,20,8"
+                 Margin="39,172,36,8"
                  TextWrapping="NoWrap"
                  IsReadOnly="True"
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
-                 Cursor="IBeam" Grid.ColumnSpan="4"/>
+                 Cursor="IBeam"/>
     </Grid>
 </Window>

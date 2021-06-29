@@ -43,14 +43,6 @@
             "Autoupdater.NET.Official": {
               "target": "Package",
               "version": "[1.6.4, )"
-            },
-            "VideoLibrary": {
-              "target": "Package",
-              "version": "[3.1.2, )"
-            },
-            "YoutubeExplode": {
-              "target": "Package",
-              "version": "[6.0.3, )"
             }
           },
           "imports": [

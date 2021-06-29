@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 using System.Diagnostics;
-using System.Net;
-using AutoUpdaterDotNET;
 using EzStreaming;
+using EzStreaming.Scripts;
+using System.Collections;
 
 namespace EzStream
 {
@@ -26,15 +19,16 @@ namespace EzStream
     /// </summary>
     public partial class MainWindow : Window
     {
-        string dir = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+        public string video, audio, dir = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
         public class Channel { public string Channels { get; set; } public string start { get; set; } }
-        public string[] vs = Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) + "/Data/", "*.bat", SearchOption.AllDirectories);
+        ArrayList ListChannels = new ArrayList();
+        public string[] vs = Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) + "/Data/", "*.bat");
         public List<string> ChannelsAutoRun = new List<string>();
-        Dictionary<string, int> CurrentStreaing = new Dictionary<string, int>();
-        public string video = "";
-        public string audio = "";
+        Dictionary<string, Process> CurrentStreaming = new Dictionary<string, Process>();
+        private Process DiscordBot = new Process();
 
-        void GetChannels() => Array.ForEach(vs, x => this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" }));
+
+        void GetChannels() => Array.ForEach(vs, x => ListChannels.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" }));
             //foreach (string x in vs)
               //  this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" });
 
@@ -50,6 +44,7 @@ namespace EzStream
                 autostart_button_edit.Visibility = Visibility.Visible;
             }
             GetChannels();
+            lbox.ItemsSource = ListChannels;
         }
 
         private void btn1_Click(object sender, RoutedEventArgs e){
@@ -67,18 +62,7 @@ namespace EzStream
             this.lbox.Items.Refresh();
         }
         private void StopStreaming(string channel){
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.WorkingDirectory = dir + "/Data/";
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C" + $"taskkill /F /T /PID {CurrentStreaing[channel]}";
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            process.StartInfo = startInfo;
-            process.Start();
-            CurrentStreaing.Remove(channel);
-            //process.Kill();
+            CurrentStreaming[channel].Kill();
         }
         private void AutoRunChannels(){
             ChannelsAutoRun = File.ReadAllLines(dir + "/Data/Channels.txt").ToList();
@@ -88,14 +72,11 @@ namespace EzStream
         }
         private void LoadStream(string channel){
             System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.WorkingDirectory = dir + "/Data/";
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C" + $"{channel}.bat";
-            process.StartInfo = startInfo;
+            process.StartInfo.WorkingDirectory = dir + "/Data/";
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.Arguments = "/C" + $"{channel}.bat";
             process.Start();
-            CurrentStreaing.Add(channel, process.Id);
+            CurrentStreaming.Add(channel, process);
         }
 
         private void btn3_Click(object sender, RoutedEventArgs e){
@@ -119,9 +100,8 @@ namespace EzStream
                 obj.TargetPath = Process.GetCurrentProcess().MainModule.FileName;
                 obj.Save();
             }
-            else
-            {
-                System.IO.File.Delete(file);
+            else{
+                File.Delete(file);
             }
 
             EzStreaming.Properties.Settings.Default.Save();
@@ -228,24 +208,24 @@ namespace EzStream
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
                         if ((bool)cb2.IsChecked)
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 - preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 - preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA":
                         if ((bool)cb2.IsChecked)
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
                         if ((bool)cb2.IsChecked)
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "autoStreamerv2 - Grand Bob":
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -codec:v libx264 -pix_fmt yuv420p -preset veryfast -b:v 400k -g 10.0 -codec:a aac -b:a 96k -ar 44100 -maxrate 400k -bufsize 200k -strict experimental -f flv rtmp://live.twitch.tv/app/{stream_key.Text}");
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -codec:v libx264 -pix_fmt yuv420p -preset veryfast -b:v 400k -g 10.0 -codec:a aac -b:a 96k -ar 44100 -maxrate 400k -bufsize 200k -strict experimental -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "GPU NVIDEA":
                       break;
@@ -255,9 +235,9 @@ namespace EzStream
                       break;
                     case "Custom":
                         if ((bool)cb2.IsChecked)
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}");
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
                       break;
                 }
                 progressBar.Value = 40;
@@ -283,14 +263,12 @@ namespace EzStream
             else
             { //Convert gif to mp4 for suport on ffmpeg
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.WorkingDirectory = dir + "/Data/";
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = "/C" + $" ffmpeg -f gif -i {video} -vf scale={Resolution.Text} -c:v libx264 -pix_fmt yuv420p {dir + "/Data/Video/" + Channel_Name.Text}.mp4";
-                startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = true;
-                process.StartInfo = startInfo;
+                process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                process.StartInfo.WorkingDirectory = dir + "/Data/";
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = "/C" + $" ffmpeg -f gif -i {video} -vf scale={Resolution.Text} -c:v libx264 -pix_fmt yuv420p {dir + "/Data/Video/" + Channel_Name.Text}.mp4";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.CreateNoWindow = true;
                 process.Start();
                 video = dir + "/Data/Video/" + Channel_Name.Text + ".mp4";
                 process.WaitForExit();
@@ -307,19 +285,7 @@ namespace EzStream
             }
         }
         
-        void fabric(string input)
-        {
-            File.Create(dir + "/Data/" + Channel_Name.Text + ".bat").Dispose();
-            using (TextWriter tw = new StreamWriter(dir + "/Data/" + Channel_Name.Text + ".bat"))
-            {
-                tw.WriteLine("Title " + Channel_Name.Text);
-                tw.WriteLine("mode con:lines=1");
-                tw.WriteLine("color 5A");
-                tw.WriteLine(":start");
-                tw.WriteLine(input);
-                tw.WriteLine("goto start");
-            }
-        }
+
         private void default_presets_DropDownClosed(object sender, EventArgs e){
             Custom.Visibility = Visibility.Hidden;
             extra.Visibility = Visibility.Hidden;
@@ -391,48 +357,98 @@ namespace EzStream
 
         private void VerifyFiles_Click(object sender, RoutedEventArgs e)
         {
-            if (CreateMD5(dir + "/Data/ffmpeg.exe") != "6FF3B9C74BE96F064CAA17191E0718AF")
-            {
-                File.Delete(dir + "/Data/ffmpeg.exe");
-                using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), dir + "/Data/ffmpeg.exe");
-            }
-            if (CreateMD5(dir + "/Data/youtube-dl.exe") != "7D71FBDEE51BA630BA2D669FBB583425")
-            {
-                File.Delete(dir + "/Data/youtube-dl.exe");
-                using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
-            }
-            //CreateMD5("");
+            Functions.CheckFiles(dir);
         }
 
-        public static string CreateMD5(string input)
-        {
-            // Use input string to calculate MD5 hash
-            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-            {
-                byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-                byte[] hashBytes = md5.ComputeHash(inputBytes);
-
-                // Convert the byte array to hexadecimal string
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < hashBytes.Length; i++)
-                {
-                    sb.Append(hashBytes[i].ToString("X2"));
-                }
-                return sb.ToString();
-            }
-        }
 
         private void StartVerify_Checked(object sender, RoutedEventArgs e)
         {
-            //MessageBox.Show(StartVerify.IsChecked.ToString());
             EzStreaming.Properties.Settings.Default.StartVery = (bool)StartVerify.IsChecked;
+        }
+
+        private void Windows_Close(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C" + $"taskkill /F /T /PID {DiscordBot.Id}";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            process.StartInfo = startInfo;
+            process.Start();
         }
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
-            AutoUpdater.Start("https://github.com/YouAreMyTrap/EzStreamig/raw/main/update.xml");
+                Functions.UpdateProgram();
+        }
+        private void Discord_Click(object sender, RoutedEventArgs e)
+        {
+            try{
+                if (Discord.Background.ToString() == Colors.OrangeRed.ToString()){
+                    Discord.Background = new SolidColorBrush(Colors.Orange);
+                    //Clipboard.SetText(Discord.Background.ToString());
+                    discordtabitem.Visibility = Visibility.Visible;
+                    //DiscordBot = new Process();
+                    DiscordBot.StartInfo.FileName = "cmd.exe";
+                    DiscordBot.StartInfo.UseShellExecute = false;
+                    DiscordBot.StartInfo.RedirectStandardOutput = true;
+                    DiscordBot.StartInfo.CreateNoWindow = true;
+                    DiscordBot.OutputDataReceived += new DataReceivedEventHandler((object? sendingProcess, DataReceivedEventArgs outLine) => { 
+                        if (!String.IsNullOrEmpty(outLine.Data)) this.resultTextBox.Dispatcher.Invoke(new Action(() => { 
+                            this.resultTextBox.AppendText(outLine.Data + Environment.NewLine); 
+                            this.resultTextBox.ScrollToEnd();
+                            if(outLine.Data != "Started") { 
+                                //var splited = outLine.Data.Split(": ");
+                                Channel chn = new Channel();
+                                chn.Channels = outLine.Data.Split(": ")[1];
+                                //MessageBox.Show(splited[1]);
+                                //MessageBox.Show(lbox.Items[lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels)].ToString());
+                                //MessageBox.Show(lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels).ToString());
+                                Channel chn2 = lbox.Items[lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels)] as Channel;
+                               // MessageBox.Show(outLine.Data.Split(": ")[0]);
+                                if (outLine.Data.Split(": ")[0] == "Stop" && chn2.start == "/data/2.png")
+                                {
+                                    StopStreaming(chn2.Channels);
+                                    chn2.start = "/data/1.png";
+                                }
+                                if (outLine.Data.Split(": ")[0] == "Start" && chn2.start == "/data/1.png")
+                                {
+                                    LoadStream(chn2.Channels);
+                                    chn2.start = "/data/2.png";
+                                }
+                                this.lbox.Items.Refresh();
+
+                            }
+                            else
+                            {
+                                //MessageBox.Show("Run Correct");
+                                Discord.Background = new SolidColorBrush(Colors.GreenYellow);
+                            }
+                        })); });
+                    DiscordBot.StartInfo.ArgumentList.Add($"/C {dir + @"\Data\Extensions\NodeJs\node.exe"} {dir + @"\Data\Extensions\Bot.js"} {""}");
+                    //bgrided.IsEnabled = false;
+                    DiscordBot.Start();
+                    DiscordBot.BeginOutputReadLine();
+                }
+                else{
+                    Discord.Background = new SolidColorBrush(Colors.OrangeRed);
+                    discordtabitem.Visibility = Visibility.Hidden;
+                    System.Diagnostics.Process process = new System.Diagnostics.Process();
+                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    startInfo.FileName = "cmd.exe";
+                    startInfo.Arguments = "/C" + $"taskkill /F /T /PID {DiscordBot.Id}";
+                    startInfo.UseShellExecute = false;
+                    startInfo.CreateNoWindow = true;
+                    process.StartInfo = startInfo;
+                    process.Start();
+                }
+            }
+            catch (Exception){
+                Console.Write("Hello World");
+            }
         }
     }
 }
