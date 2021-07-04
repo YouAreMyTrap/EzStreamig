@@ -6,8 +6,8 @@
       "version": "3.1.0"
     },
     "additionalProbingPaths": [
-      "C:\\Users\\Pink\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\Pink\\.nuget\\packages"
+      "C:\\Users\\yumin\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\yumin\\.nuget\\packages"
     ],
     "configProperties": {
       "Microsoft.NETCore.DotNetHostPolicy.SetAppPaths": true

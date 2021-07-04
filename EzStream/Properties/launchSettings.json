@@ -1,7 +1,8 @@
 {
   "profiles": {
     "EzStreaming": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "nativeDebugging": false
     }
   }
 }

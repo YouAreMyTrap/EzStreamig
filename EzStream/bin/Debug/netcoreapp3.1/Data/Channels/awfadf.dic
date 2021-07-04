@@ -1,8 +1,0 @@
-[default_presets: Custom]
-[Name: awfadf]
-[Platform: Twitch]
-[FPS: 30]
-[Codec: h264_nvenc]
-[StreamKey: afddf]
-[Bittrate: 1000k]
-[Preset: medium]

@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {}
+    "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {
+    "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj": {
       "version": "2.0.4.1",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
+        "projectUniqueName": "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
         "projectName": "EzStreaming",
-        "projectPath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
-        "packagesPath": "C:\\Users\\Pink\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\obj\\",
+        "projectPath": "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
+        "packagesPath": "C:\\Users\\yumin\\.nuget\\packages\\",
+        "outputPath": "D:\\Documents\\EzStreamig\\EzStream\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Pink\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\yumin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,6 +43,18 @@
             "Autoupdater.NET.Official": {
               "target": "Package",
               "version": "[1.6.4, )"
+            },
+            "MaterialDesignColors": {
+              "target": "Package",
+              "version": "[2.0.1, )"
+            },
+            "MaterialDesignExtensions": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "MaterialDesignThemes": {
+              "target": "Package",
+              "version": "[4.1.0, )"
             }
           },
           "imports": [
@@ -63,7 +75,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

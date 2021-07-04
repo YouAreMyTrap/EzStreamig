@@ -1,10 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "NZGnQixjT+ny3gh+iWAIiIOCGsabdVtp8EgZ4krrGhyxhfaO2BlgMQL8DtShbChFqwW6t8jTRaKDZ5yAxwCNqg==",
+  "dgSpecHash": "0S21hZ8Prs7eT8BMG3sHbgktcE8uFbJGnBwqJuLkFzm0HbKOkOxCD1L2RqFV5L6hGKyXzqWjywSxeE58G3pz8g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Pink\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
+  "projectFilePath": "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Pink\\.nuget\\packages\\autoupdater.net.official\\1.6.4\\autoupdater.net.official.1.6.4.nupkg.sha512"
+    "C:\\Users\\yumin\\.nuget\\packages\\autoupdater.net.official\\1.6.4\\autoupdater.net.official.1.6.4.nupkg.sha512",
+    "C:\\Users\\yumin\\.nuget\\packages\\materialdesigncolors\\2.0.1\\materialdesigncolors.2.0.1.nupkg.sha512",
+    "C:\\Users\\yumin\\.nuget\\packages\\materialdesignextensions\\3.3.0\\materialdesignextensions.3.3.0.nupkg.sha512",
+    "C:\\Users\\yumin\\.nuget\\packages\\materialdesignthemes\\4.1.0\\materialdesignthemes.4.1.0.nupkg.sha512"
   ],
   "logs": [
     {

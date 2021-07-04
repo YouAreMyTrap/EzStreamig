@@ -3,71 +3,87 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EzStreaming"
+        xmlns:local="clr-namespace:EzStreaming" 
+        xmlns:mde="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="EzStreaming 2.1 - beta" Height="450" Width="641" Closed="Windows_Close">
+        Title="EzStreaming 2.1 - beta" Height="678" Width="641" Closed="Windows_Close">
     <Grid>
-        <TabControl>
-            <TabItem Header="Main">
-                <Grid Background="#FFE5E5E5">
+        <TabControl Style="{StaticResource MaterialDesignTabControl}" >
+            <TabItem Header="Main" >
+                <Grid>
+                    <TextBlock Style="{StaticResource MaterialDesignSubtitle2TextBlock}" Text="Channel Name" Margin="32,28,434,286" Foreground="White" />
                     <ListBox x:Name="lbox" HorizontalContentAlignment="Stretch" Margin="21,45,10,24" Grid.ColumnSpan="4">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,0">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
                                         <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="50" />
+                                        <ColumnDefinition Width="50" />
                                     </Grid.ColumnDefinitions>
                                     <!--<Image Source="/WpfTutorialSamples;component/Images/bullet_red.png" />-->
-                                    <TextBlock Text="{Binding Channels}" />
+                                    <materialDesign:PackIcon Kind="Twitch" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Channels}" Grid.Column="1"/>
 
-                                    <Button  x:Name="btn1" Click="btn1_Click" Grid.Column="1"  Width="20" Background="#00000000" Foreground="#00000000">
-                                        <Image x:Name="btn1i" Source="{Binding start}" />
+                                    <Button x:Name="btn1" Click="btn1_Click" Grid.Column="2">
+                                        <materialDesign:PackIcon Kind="Play"/>
                                     </Button>
-                                    <Button x:Name="btn3" Click="btn3_Click" Grid.Column="2" Width="20" Background="#00000000" Foreground="#00000000">
-                                        <Image Source="/data/bt2.png" />
+                                    <Button x:Name="btn3" Click="btn3_Click" Grid.Column="3">
+                                        <materialDesign:PackIcon Kind="Delete" />
                                     </Button>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Label Content="Channel Name" HorizontalAlignment="Left" Margin="21,19,0,0" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
                 </Grid>
             </TabItem>
             <TabItem Header="New User">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Canvas x:Name="Custom" Margin="0,38,0,56" Grid.ColumnSpan="2">
-                        <TextBlock Text="Chanel Name" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="4"/>
-                        <TextBox x:Name="Channel_Name" Text="Channel Name" TextWrapping="Wrap" Width="322" Height="37" FontWeight="Normal" FontSize="18" Canvas.Left="30" Canvas.Top="20" TextAlignment="Left" Cursor=""/>
 
-                        <TextBlock Text="Stream Key" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="57"/>
-                        <TextBox x:Name="stream_key" Text="Stream_Key" TextWrapping="Wrap" Width="322" Height="37" FontSize="18" Canvas.Left="30" Canvas.Top="74"/>
+                        <TextBox Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="Channel Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="Channel_Name" Width="322" Canvas.Left="30" Canvas.Top="35" Cursor="IBeam">
+                            <TextBox.Text>
+                                <Binding Path="Name" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                        <TextBox Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="Steam key" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="stream_key" Text="" Width="322" Height="37" Canvas.Left="30" Canvas.Top="74"/>
                         <Canvas x:Name="extra" Visibility="Visible">
-                            <TextBox x:Name="bittrate" Text="1000k" TextWrapping="Wrap" Width="159" Height="37" FontSize="20" Canvas.Left="30" Canvas.Top="131"/>
-                            <TextBlock Text="Bittrate" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="115"/>
+                            <TextBox Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="Bittrate" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="bittrate" Text="1000k" Width="159" Height="37" Canvas.Left="30" Canvas.Top="131" Cursor="IBeam"/>
 
-                            <TextBox x:Name="fps" Text="30" TextWrapping="Wrap" Width="159" Height="37" FontSize="20" Canvas.Left="194" Canvas.Top="131"/>
-                            <TextBlock Text="FPS" TextWrapping="Wrap" Canvas.Left="195" Canvas.Top="115"/>
-
-                            <TextBlock Text="Platform" TextWrapping="Wrap" Canvas.Left="30" Canvas.Top="168"/>
-                            <ComboBox x:Name="Plarfomr_sel" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="30" Canvas.Top="184">
+                            <TextBox Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="FPS" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="fps" Text="30" Width="159" Height="37" Canvas.Left="194" Canvas.Top="131"/>
+                            <ComboBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="Plarfomr_sel" Width="159" Height="37" IsReadOnly="True" Canvas.Left="30" Canvas.Top="184" 
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              materialDesign:HintAssist.Hint="Platform"
+                              materialDesign:HintAssist.HelperText="Select one Platform"
+                              materialDesign:ComboBoxAssist.ClassicMode="True">
                                 <ComboBoxItem IsSelected="True" Content="Twitch"/>
                                 <ComboBoxItem Content="Youtube"/>
                                 <ComboBoxItem Content="Facebook"/>
                                 <ComboBoxItem Content="Trovo"/>
                                 <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                             </ComboBox>
-
-                            <TextBlock Text="Codec" TextWrapping="Wrap" Canvas.Left="195" Canvas.Top="168"/>
-                            <ComboBox x:Name="Codec_sel" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="194" Canvas.Top="184">
-                                <ComboBoxItem IsSelected="True" Content="h264_nvenc"/>
+                            <ComboBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="Codec_sel" Width="158" Height="37" IsReadOnly="True" Canvas.Left="194" Canvas.Top="184"   
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              materialDesign:HintAssist.Hint="Codec"
+                              materialDesign:HintAssist.HelperText="Select one Codec"
+                              materialDesign:ComboBoxAssist.ClassicMode="True">
+                                <ComboBoxItem Content="h264_nvenc"/>
                                 <ComboBoxItem Content="libx264"/>
                             </ComboBox>
-
-                            <TextBlock Text="Preset" TextWrapping="Wrap" Canvas.Left="381" Canvas.Top="203"/>
-                            <ComboBox x:Name="Preset" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="220" IsEnabled="False">
+                            <ComboBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="Preset" Width="158" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="381" Canvas.Top="220" IsEnabled="False" Visibility="Hidden">
                                 <ComboBoxItem Content="ultrafast"/>
                                 <ComboBoxItem Content="superfast"/>
                                 <ComboBoxItem Content="veryfast"/>
@@ -80,20 +96,23 @@
                                 <ComboBoxItem Content="placebo"/>
                             </ComboBox>
                         </Canvas>
-                        <CheckBox x:Name="cb1" Content="Video" Height="20" Width="322" Checked="CheckBox_video_Checked" Unchecked="CheckBox_video_unchecked" Canvas.Left="380" Canvas.Top="18"/>
-                        <CheckBox x:Name="cb2" Content="Audio" Height="24" Width="322" Checked="CheckBox_audio_Checked" Unchecked="CheckBox_audio_unchecked" Canvas.Left="380" Canvas.Top="92"/>
-                        <TextBlock Text="Resolution" TextWrapping="Wrap" Canvas.Left="380" Canvas.Top="150"/>
-                        <ComboBox x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" FontSize="20" Canvas.Left="380" Canvas.Top="166">
+                        <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="cb1" Content="Video" Height="20" Width="322" Checked="CheckBox_video_Checked" Unchecked="CheckBox_video_unchecked" Canvas.Left="380" Canvas.Top="42"/>
+                        <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="cb2" Content="Audio" Height="24" Width="322" Checked="CheckBox_audio_Checked" Unchecked="CheckBox_audio_unchecked" Canvas.Left="380" Canvas.Top="92"/>
+                        <ComboBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="Resolution" Width="159" Height="37" IsReadOnly="True" Canvas.Left="380" Canvas.Top="181"                              
+                              Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                              materialDesign:HintAssist.Hint="Resolution"
+                              materialDesign:HintAssist.HelperText="Select one Resolution"
+                              materialDesign:ComboBoxAssist.ClassicMode="True">
                             <ComboBoxItem Content="1920:1080"/>
                             <ComboBoxItem IsSelected="True" Content="1280:720"/>
                             <ComboBoxItem Content="640:480"/>
                             <!--<ComboBoxItem>Manual</ComboBoxItem>-->
                         </ComboBox>
-                        <CheckBox x:Name="ytvideo" Content="Youtube Video" Height="20" Width="322" Checked="ytvideo_Checked" Unchecked="ytvideo_unchecked" Canvas.Left="380" Canvas.Top="43"/>
-                        <CheckBox x:Name="ytaudio" Content="Youtube Audio" Height="20" Width="322" Checked="ytaudio_Checked" Unchecked="ytaudio_unchecked" Canvas.Left="380" Canvas.Top="116" Visibility="Hidden"/>
+                        <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="ytvideo" Content="Youtube Video" Height="20" Width="322" Checked="ytvideo_Checked" Unchecked="ytvideo_unchecked" Canvas.Left="380" Canvas.Top="67"/>
+                        <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="ytaudio" Content="Youtube Audio" Height="20" Width="322" Checked="ytaudio_Checked" Unchecked="ytaudio_unchecked" Canvas.Left="380" Canvas.Top="116" Visibility="Hidden"/>
                     </Canvas>
 
-                    <ComboBox x:Name="default_presets" HorizontalAlignment="Left" Margin="18,16,0,0" VerticalAlignment="Top" Width="598" DropDownClosed="default_presets_DropDownClosed" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
+                    <ComboBox Style="{StaticResource MaterialDesignOutlinedComboBox}" Foreground="{DynamicResource MaterialDesignBody}" x:Name="default_presets" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="612" DropDownClosed="default_presets_DropDownClosed" FlowDirection="LeftToRight">
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA"/>
                         <ComboBoxItem Content="MusicStreamer/MassStreamer by viri - MOD GPU AMD"/>
@@ -103,16 +122,9 @@
                         <ComboBoxItem Content="CPU" IsEnabled="False"/>
                         <ComboBoxItem IsSelected="True" Content="Custom"/>
                     </ComboBox>
-                    <Button x:Name="bgrided" Grid.Column="1" HorizontalAlignment="Left" Margin="30,325,0,0" VerticalAlignment="Top" Height="41" Width="302" Click="Button_Click">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Grid>
-                                    <ProgressBar x:Name="pgbarr" Value="0" Maximum="100" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
-                                    <Label Content="Make" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-                                </Grid>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                    <Button x:Name="bgrided" Click="Button_Click" Canvas.Left="30" Canvas.Top="35"
+                            Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="False" materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Make" Margin="165,501,174,72" Cursor="Hand"/>
+
                     <TextBox x:Name="ytlink_video" HorizontalAlignment="Left" Margin="250,101,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
                     <TextBox x:Name="ytlink_audio" HorizontalAlignment="Left" Margin="250,171,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
 
@@ -121,10 +133,8 @@
 
             </TabItem>
             <TabItem Header="Options">
-                <Grid Background="#FFE5E5E5">
-                    <CheckBox x:Name="AutoRun" Content="Auto Run EzStreaming" HorizontalAlignment="Left" Margin="23,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_Checked" Unchecked="CheckBox_Checked"/>
-                    <CheckBox x:Name="AutoRun2" Content="Auto Run Channels" HorizontalAlignment="Left" Margin="23,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="CheckBox_channels_Checked" Unchecked="CheckBox_channels_Checked"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="556,40,0,0" Text="By: YAMT" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="3.006,-6.511">
+                <Grid>
+                    <TextBlock Foreground="{DynamicResource MaterialDesignBody}" HorizontalAlignment="Left" Margin="576,28,0,0" Text="By: YAMT" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="3.006,-6.511">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform/>
@@ -134,16 +144,29 @@
                             </TransformGroup>
                         </TextBlock.RenderTransform>
                     </TextBlock>
-                    <Label Content="Donations:" HorizontalAlignment="Left" Margin="25,166,0,0" VerticalAlignment="Top" Visibility="Hidden"/>
+                    <Label Content="Donations:" HorizontalAlignment="Left" Margin="12,166,0,0" VerticalAlignment="Top" Visibility="Hidden" Grid.ColumnSpan="2" Grid.Column="1"/>
 
-                    <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="585" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click"/>
-                    <TextBox HorizontalAlignment="Center" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Margin="0,83,0,0" Text="Channel1" VerticalAlignment="Top" Width="586" Height="263" Visibility="Hidden"/>
-                    <Button x:Name="autostart_button_edit" Content="" HorizontalAlignment="Left" Margin="168,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.453" Height="15" Width="23" Click="autostart_button_edit_Click" Visibility="Hidden"/>
-                    <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="432,16,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
-                    <CheckBox x:Name="StartVerify" Content="Verify update on start?" HorizontalAlignment="Left" Margin="189,28,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.388,-0.282" Checked="StartVerify_Checked" Unchecked="StartVerify_Checked"/>
-                    <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="432,41,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
-                    <Button x:Name="Discord" Content="Discord Bot" HorizontalAlignment="Left" Margin="432,66,0,0" VerticalAlignment="Top" Click="Discord_Click" Background="OrangeRed"/>
-
+                    <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Left" Margin="387,242,0,0" VerticalAlignment="Top" Width="210" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click" Height="37"/>
+                    <TextBox Foreground="{DynamicResource MaterialDesignBody}" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Write Channels Name for AutoRun" HorizontalAlignment="Left" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" Margin="387,83,0,0" VerticalAlignment="Top" Width="210" Height="154" Visibility="Visible" Cursor="IBeam"/>
+                    <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="442,6,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
+                    <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="310,6,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
+                    <Button x:Name="Discord" Content="Discord Bot" HorizontalAlignment="Left" Margin="387,41,0,0" VerticalAlignment="Top" Click="Discord_Click" Background="OrangeRed"/>
+                    <StackPanel Orientation="Horizontal" Margin="10,193,437,371">
+                        <ToggleButton Margin="8 0 16 0"/>
+                        <TextBlock VerticalAlignment="Center" Text="Discord Bot" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,218,366,346">
+                        <ToggleButton x:Name="togglebutton_AutoRunEzStreaming" Margin="8 0 16 0" Checked="togglebutton_AutoRunEzStreaming_Checked" Unchecked="togglebutton_AutoRunEzStreaming_Checked"/>
+                        <TextBlock VerticalAlignment="Center" Text="Auto Run EzStreaming" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,248,377,316">
+                        <ToggleButton x:Name="togglebutton_AutoRunChannels" Margin="8 0 16 0" Checked="togglebutton_AutoRunChannels_Checked" Unchecked="togglebutton_AutoRunChannels_Checked" />
+                        <TextBlock VerticalAlignment="Center" Text="Auto Run Channels" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,275,377,289">
+                        <ToggleButton x:Name="togglebutton_StartVerify" Margin="8 0 16 0" Checked="togglebutton_StartVerify_Checked" Unchecked="togglebutton_StartVerify_Checked" />
+                        <TextBlock VerticalAlignment="Center" Text="Verify update on start?" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem x:Name="discordtabitem" Header="Discord Bot" Visibility="Hidden">

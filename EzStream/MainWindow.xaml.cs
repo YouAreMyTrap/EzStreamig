@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.IO;
 using Microsoft.Win32;
+using MaterialDesignThemes.Wpf;
 using System.Diagnostics;
 using EzStreaming;
 using EzStreaming.Scripts;
@@ -35,14 +36,12 @@ namespace EzStream
         public MainWindow()
         {
             InitializeComponent();
-            AutoRun.IsChecked = EzStreaming.Properties.Settings.Default.AutoRun_bool;
-            StartVerify.IsChecked = EzStreaming.Properties.Settings.Default.StartVery;
-            AutoRun2.IsChecked = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
+            togglebutton_AutoRunEzStreaming.IsChecked = EzStreaming.Properties.Settings.Default.AutoRun_bool;
+            togglebutton_StartVerify.IsChecked = EzStreaming.Properties.Settings.Default.StartVery;
+            togglebutton_AutoRunChannels.IsChecked = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
             tbMultiLine.Text = File.ReadAllText(dir + "/Data/Channels.txt");
             if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
-                AutoRunChannels();
-                autostart_button_edit.Visibility = Visibility.Visible;
-            }
+                AutoRunChannels();            }
             GetChannels();
             lbox.ItemsSource = ListChannels;
         }
@@ -89,42 +88,6 @@ namespace EzStream
                 this.lbox.Items.Remove(chn);
             }
         }
-        private void CheckBox_Checked(object sender, RoutedEventArgs e){
-            object Index = "Startup";
-            IWshRuntimeLibrary.WshShell wshShell = new IWshRuntimeLibrary.WshShellClass();
-            string file = (string)wshShell.SpecialFolders.Item(ref Index) + "\\EzStreaming.lnk";
-            //Process.GetCurrentProcess().MainModule.FileName
-            if (AutoRun.IsChecked == true){
-                IWshRuntimeLibrary.IWshShortcut obj = (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(file);
-                obj.Description = "EzStreming Shortcut";
-                obj.TargetPath = Process.GetCurrentProcess().MainModule.FileName;
-                obj.Save();
-            }
-            else{
-                File.Delete(file);
-            }
-
-            EzStreaming.Properties.Settings.Default.Save();
-        }
-
-        private void CheckBox_channels_Checked(object sender, RoutedEventArgs e){
-            if ((bool)AutoRun2.IsChecked){
-                if (!EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
-                   // Process.Start("notepad.exe", dir + "/Data/Channels.txt");
-                    EzStreaming.Properties.Settings.Default.AutoRunCh_bool = true;
-                    autostart_button_edit.Visibility = Visibility.Visible;
-                    tbMultiLine.Visibility = Visibility.Visible;
-                    autostart_button_save.Visibility = Visibility.Visible;
-                }
-            }
-            else { 
-               EzStreaming.Properties.Settings.Default.AutoRunCh_bool = false;
-                autostart_button_edit.Visibility = Visibility.Hidden;
-                tbMultiLine.Visibility = Visibility.Hidden;
-                autostart_button_save.Visibility = Visibility.Hidden;
-            }
-            EzStreaming.Properties.Settings.Default.Save();
-        }
         #region newuser
         private void CheckBox_video_Checked(object sender, RoutedEventArgs e){
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -158,7 +121,7 @@ namespace EzStream
         private void ytaudio_unchecked(object sender, RoutedEventArgs e){ 
             //ytlink_audio.Visibility = Visibility.Hidden;
             ytlink_audio.Text = "Link Youtube";
-            video = "";
+            audio = "";
         }
         private void CheckBox_audio_Checked(object sender, RoutedEventArgs e){
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -168,8 +131,10 @@ namespace EzStream
                 cb2.Content = System.IO.Path.GetFileName(audio);
                 ytaudio.IsChecked = false;
             }
-            else
+            else { 
                 cb2.IsChecked = false;
+                audio = "";
+            }
         }
 
         private void CheckBox_video_unchecked(object sender, RoutedEventArgs e){
@@ -178,7 +143,7 @@ namespace EzStream
         }
         private void CheckBox_audio_unchecked(object sender, RoutedEventArgs e){
             cb2.Content = "Audio";
-            video = "";
+            audio = "";
         }
         string GetPlatform(string name){
             switch (name){
@@ -195,16 +160,10 @@ namespace EzStream
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e){
-            var template = bgrided.Template;
-            var progressBar = (ProgressBar)template.FindName("pgbarr", bgrided);
-            progressBar.Foreground = new SolidColorBrush(Colors.Green);
             if (Channel_Name.Text != "Channel Name" && !Channel_Name.Text.Contains(" ") && stream_key.Text != "Stream_Key" && video != "" && !File.Exists(dir + "/Data/" + Channel_Name.Text + ".bat")){
-                progressBar.Value = 10;
-                Setvideo(progressBar);
-                progressBar.Value = 20;
-                SetAudio(progressBar);
-                progressBar.Value = 30;
-                progressBar.Foreground = new SolidColorBrush(Colors.Green);
+                ButtonProgressAssist.SetIsIndicatorVisible(bgrided, true);
+                Setvideo();
+                SetAudio();
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
                         if ((bool)cb2.IsChecked)
@@ -234,31 +193,34 @@ namespace EzStream
                     case "CPU":
                       break;
                     case "Custom":
-                        if ((bool)cb2.IsChecked)
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
-                        else
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
-                      break;
+                        if (audio == "") { 
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
+                        }
+                        else { 
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
+                        }
+                        break;
                 }
-                progressBar.Value = 40;
-                this.lbox.Items.Add(new Channel { Channels = Channel_Name.Text, start = "/data/1.png" });
-                progressBar.Value = 50;
+                ListChannels.Add(new Channel { Channels = Channel_Name.Text, start = "/data/1.png" });
+                lbox.Items.Refresh();
                 Create_profile();
-                progressBar.Value = 100;
+                ButtonProgressAssist.SetIsIndicatorVisible(bgrided, false);
             }
-            else { 
+            else
+            {
+                ButtonProgressAssist.SetIsIndicatorVisible(bgrided, false);
                 //MessageBox.Show("Please set correct values");
-                progressBar.Foreground = new SolidColorBrush(Colors.Red);
-                progressBar.Value = 100;
+
             }
         }
-        void Setvideo(ProgressBar progressBar)
+        void Setvideo()
         {
             if (System.IO.Path.GetExtension(video) != ".gif") {
-                progressBar.Foreground = new SolidColorBrush(Colors.Yellow);
                 var FileDestination = new FileInfo(dir + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
                 var FileSource = new FileInfo(video);
-                Task.Run(() => {FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));}).GetAwaiter();
+                int vaule;
+                Task.Run(() => { FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => vaule = x)); }).GetAwaiter();
+
             }
             else
             { //Convert gif to mp4 for suport on ffmpeg
@@ -274,14 +236,14 @@ namespace EzStream
                 process.WaitForExit();
             }
         }
-        void SetAudio(ProgressBar progressBar)
+        void SetAudio()
         {
             //copy music to folder music
-            if (audio != "") { 
-                progressBar.Foreground = new SolidColorBrush(Colors.YellowGreen);
+            if (audio == "") {
                 var FileDestination = new FileInfo(dir + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
                 var FileSource = new FileInfo(audio);
-                Task.Run(() => {FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => progressBar.Value = x));}).GetAwaiter();
+                int vaule;
+                Task.Run(() => { FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => vaule = x)); }).GetAwaiter();
             }
         }
         
@@ -290,7 +252,7 @@ namespace EzStream
             Custom.Visibility = Visibility.Hidden;
             extra.Visibility = Visibility.Hidden;
             cb2.Visibility = Visibility.Visible;
-            ytaudio.Visibility = Visibility.Visible;
+            //ytaudio.Visibility = Visibility.Visible;
             switch (default_presets.Text){
                 case "MusicStreamer/MassStreamer by viri":
                     Custom.Visibility = Visibility.Visible;
@@ -344,26 +306,9 @@ namespace EzStream
                 tw.Write(tbMultiLine.Text);
         }
 
-        private void autostart_button_edit_Click(object sender, RoutedEventArgs e){
-            if (tbMultiLine.Visibility == Visibility.Visible){
-                tbMultiLine.Visibility = Visibility.Hidden;
-                autostart_button_save.Visibility = Visibility.Hidden;
-            }
-            else{
-                tbMultiLine.Visibility = Visibility.Visible;
-                autostart_button_save.Visibility = Visibility.Visible;
-            }
-        }
-
         private void VerifyFiles_Click(object sender, RoutedEventArgs e)
         {
             Functions.CheckFiles(dir);
-        }
-
-
-        private void StartVerify_Checked(object sender, RoutedEventArgs e)
-        {
-            EzStreaming.Properties.Settings.Default.StartVery = (bool)StartVerify.IsChecked;
         }
 
         private void Windows_Close(object sender, EventArgs e)
@@ -377,6 +322,55 @@ namespace EzStream
             startInfo.CreateNoWindow = true;
             process.StartInfo = startInfo;
             process.Start();
+        }
+
+
+        private void togglebutton_AutoRunChannels_Checked(object sender, RoutedEventArgs e)
+        {
+            if ((bool)togglebutton_AutoRunChannels.IsChecked)
+            {
+                if (!EzStreaming.Properties.Settings.Default.AutoRunCh_bool)
+                {
+                    // Process.Start("notepad.exe", dir + "/Data/Channels.txt");
+                    EzStreaming.Properties.Settings.Default.AutoRunCh_bool = true;
+                    tbMultiLine.Visibility = Visibility.Visible;
+                    autostart_button_save.Visibility = Visibility.Visible;
+                }
+            }
+            else
+            {
+                EzStreaming.Properties.Settings.Default.AutoRunCh_bool = false;
+                tbMultiLine.Visibility = Visibility.Hidden;
+                autostart_button_save.Visibility = Visibility.Hidden;
+            }
+            EzStreaming.Properties.Settings.Default.Save();
+        }
+
+        private void togglebutton_AutoRunEzStreaming_Checked(object sender, RoutedEventArgs e)
+        {
+            object Index = "Startup";
+            IWshRuntimeLibrary.WshShell wshShell = new IWshRuntimeLibrary.WshShellClass();
+            string file = (string)wshShell.SpecialFolders.Item(ref Index) + "\\EzStreaming.lnk";
+            //Process.GetCurrentProcess().MainModule.FileName
+            if (togglebutton_AutoRunEzStreaming.IsChecked == true)
+            {
+                IWshRuntimeLibrary.IWshShortcut obj = (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(file);
+                obj.Description = "EzStreming Shortcut";
+                obj.TargetPath = Process.GetCurrentProcess().MainModule.FileName;
+                obj.Save();
+            }
+            else
+            {
+                File.Delete(file);
+            }
+
+            EzStreaming.Properties.Settings.Default.Save();
+        }
+
+        private void togglebutton_StartVerify_Checked(object sender, RoutedEventArgs e)
+        {
+            EzStreaming.Properties.Settings.Default.StartVery = (bool)togglebutton_StartVerify.IsChecked;
+
         }
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)

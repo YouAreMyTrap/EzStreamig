@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "bpwVEBUJ/032FMOCjluuccZGsQ3b/qGrYU+rH3/lUlNpkIASnHNkr2Wo0pOYqI1SwArTOeDjcKsAUng6vXI1SQ==",
+  "success": true,
+  "projectFilePath": "D:\\Documents\\EzStreamig\\Updater\\Updater.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\yumin\\.nuget\\packages\\materialdesigncolors\\2.0.1\\materialdesigncolors.2.0.1.nupkg.sha512",
+    "C:\\Users\\yumin\\.nuget\\packages\\materialdesignthemes\\4.1.0\\materialdesignthemes.4.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}
