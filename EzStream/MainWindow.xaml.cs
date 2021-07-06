@@ -39,9 +39,14 @@ namespace EzStream
             togglebutton_AutoRunEzStreaming.IsChecked = EzStreaming.Properties.Settings.Default.AutoRun_bool;
             togglebutton_StartVerify.IsChecked = EzStreaming.Properties.Settings.Default.StartVery;
             togglebutton_AutoRunChannels.IsChecked = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
+            togglebutton_DiscordBot.IsChecked = EzStreaming.Properties.Settings.Default.Discord_bool;
+            tbMultiLine.IsEnabled = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
+            autostart_button_save.IsEnabled = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
+
             tbMultiLine.Text = File.ReadAllText(dir + "/Data/Channels.txt");
-            if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool){ 
-                AutoRunChannels();            }
+
+            if (EzStreaming.Properties.Settings.Default.Discord_bool) StartDiscord();
+            if (EzStreaming.Properties.Settings.Default.AutoRunCh_bool) AutoRunChannels();
             GetChannels();
             lbox.ItemsSource = ListChannels;
         }
@@ -160,7 +165,7 @@ namespace EzStream
             }
         }
         private void Button_Click(object sender, RoutedEventArgs e){
-            if (Channel_Name.Text != "Channel Name" && !Channel_Name.Text.Contains(" ") && stream_key.Text != "Stream_Key" && video != "" && !File.Exists(dir + "/Data/" + Channel_Name.Text + ".bat")){
+            if (!Channel_Name.Text.Contains(" ") && video != "" && !File.Exists(dir + "/Data/" + Channel_Name.Text + ".bat")){
                 ButtonProgressAssist.SetIsIndicatorVisible(bgrided, true);
                 Setvideo();
                 SetAudio();
@@ -205,17 +210,19 @@ namespace EzStream
                 lbox.Items.Refresh();
                 Create_profile();
                 ButtonProgressAssist.SetIsIndicatorVisible(bgrided, false);
+                SnackbarFour.MessageQueue.Enqueue("Sucesful making streaming");
             }
             else
             {
                 ButtonProgressAssist.SetIsIndicatorVisible(bgrided, false);
+                SnackbarFour.MessageQueue.Enqueue("Error");
                 //MessageBox.Show("Please set correct values");
 
             }
         }
         void Setvideo()
         {
-            if (System.IO.Path.GetExtension(video) != ".gif") {
+            if (System.IO.Path.GetExtension(video) != ".gif" && video != "") {
                 var FileDestination = new FileInfo(dir + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
                 var FileSource = new FileInfo(video);
                 int vaule;
@@ -235,6 +242,7 @@ namespace EzStream
                 video = dir + "/Data/Video/" + Channel_Name.Text + ".mp4";
                 process.WaitForExit();
             }
+            SnackbarFour.MessageQueue.Enqueue("Video Correct");
         }
         void SetAudio()
         {
@@ -244,6 +252,7 @@ namespace EzStream
                 var FileSource = new FileInfo(audio);
                 int vaule;
                 Task.Run(() => { FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => vaule = x)); }).GetAwaiter();
+                SnackbarFour.MessageQueue.Enqueue("Audio Correct");
             }
         }
         
@@ -308,42 +317,23 @@ namespace EzStream
 
         private void VerifyFiles_Click(object sender, RoutedEventArgs e)
         {
-            Functions.CheckFiles(dir);
+            Functions.CheckFiles(dir, SnackbarFour);
+            SnackbarFour.MessageQueue.Enqueue("All errors fixed");
         }
 
         private void Windows_Close(object sender, EventArgs e)
         {
-            System.Diagnostics.Process process = new System.Diagnostics.Process();
-            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Arguments = "/C" + $"taskkill /F /T /PID {DiscordBot.Id}";
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            process.StartInfo = startInfo;
-            process.Start();
+            StopDiscord();
         }
 
 
         private void togglebutton_AutoRunChannels_Checked(object sender, RoutedEventArgs e)
         {
-            if ((bool)togglebutton_AutoRunChannels.IsChecked)
-            {
-                if (!EzStreaming.Properties.Settings.Default.AutoRunCh_bool)
-                {
-                    // Process.Start("notepad.exe", dir + "/Data/Channels.txt");
-                    EzStreaming.Properties.Settings.Default.AutoRunCh_bool = true;
-                    tbMultiLine.Visibility = Visibility.Visible;
-                    autostart_button_save.Visibility = Visibility.Visible;
-                }
-            }
-            else
-            {
-                EzStreaming.Properties.Settings.Default.AutoRunCh_bool = false;
-                tbMultiLine.Visibility = Visibility.Hidden;
-                autostart_button_save.Visibility = Visibility.Hidden;
-            }
+            EzStreaming.Properties.Settings.Default.AutoRunCh_bool = (bool)togglebutton_AutoRunChannels.IsChecked;
+            tbMultiLine.IsEnabled = (bool)togglebutton_AutoRunChannels.IsChecked;
+            autostart_button_save.IsEnabled = (bool)togglebutton_AutoRunChannels.IsChecked;
             EzStreaming.Properties.Settings.Default.Save();
+            SnackbarFour.MessageQueue.Enqueue($"Auto Run Channels: {(bool)togglebutton_AutoRunChannels.IsChecked}");
         }
 
         private void togglebutton_AutoRunEzStreaming_Checked(object sender, RoutedEventArgs e)
@@ -352,7 +342,7 @@ namespace EzStream
             IWshRuntimeLibrary.WshShell wshShell = new IWshRuntimeLibrary.WshShellClass();
             string file = (string)wshShell.SpecialFolders.Item(ref Index) + "\\EzStreaming.lnk";
             //Process.GetCurrentProcess().MainModule.FileName
-            if (togglebutton_AutoRunEzStreaming.IsChecked == true)
+            if ((bool)togglebutton_AutoRunEzStreaming.IsChecked)
             {
                 IWshRuntimeLibrary.IWshShortcut obj = (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(file);
                 obj.Description = "EzStreming Shortcut";
@@ -365,85 +355,93 @@ namespace EzStream
             }
 
             EzStreaming.Properties.Settings.Default.Save();
+            SnackbarFour.MessageQueue.Enqueue($"Startup EzStreaming: {(bool)togglebutton_AutoRunEzStreaming.IsChecked}");
         }
 
         private void togglebutton_StartVerify_Checked(object sender, RoutedEventArgs e)
         {
             EzStreaming.Properties.Settings.Default.StartVery = (bool)togglebutton_StartVerify.IsChecked;
+            SnackbarFour.MessageQueue.Enqueue($"SVerify Files on start: {(bool)togglebutton_StartVerify.IsChecked}");
 
+        }
+
+        private void Hyperlinks_click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Documents.Hyperlink hyperlink = sender as System.Windows.Documents.Hyperlink;
+            var p = new ProcessStartInfo();
+                p.UseShellExecute = true;
+                p.FileName = hyperlink.NavigateUri.ToString();
+            Process.Start(p);
+            //hyperlink.NavigateUri.ToString();
+
+
+
+        }
+
+        private void togglebutton_DiscordBot_Checked(object sender, RoutedEventArgs e)
+        {
+            EzStreaming.Properties.Settings.Default.Discord_bool = (bool)togglebutton_DiscordBot.IsChecked;
+            EzStreaming.Properties.Settings.Default.Save();
+            SnackbarFour.MessageQueue.Enqueue($"Please Restart app for: {(bool)togglebutton_DiscordBot.IsChecked} Discord Bot");
         }
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)
         {
-                Functions.UpdateProgram();
+            Functions.UpdateProgram();
+            SnackbarFour.MessageQueue.Enqueue("Check Update Program");
         }
-        private void Discord_Click(object sender, RoutedEventArgs e)
-        {
-            try{
-                if (Discord.Background.ToString() == Colors.OrangeRed.ToString()){
-                    Discord.Background = new SolidColorBrush(Colors.Orange);
-                    //Clipboard.SetText(Discord.Background.ToString());
-                    discordtabitem.Visibility = Visibility.Visible;
-                    //DiscordBot = new Process();
-                    DiscordBot.StartInfo.FileName = "cmd.exe";
-                    DiscordBot.StartInfo.UseShellExecute = false;
-                    DiscordBot.StartInfo.RedirectStandardOutput = true;
-                    DiscordBot.StartInfo.CreateNoWindow = true;
-                    DiscordBot.OutputDataReceived += new DataReceivedEventHandler((object? sendingProcess, DataReceivedEventArgs outLine) => { 
-                        if (!String.IsNullOrEmpty(outLine.Data)) this.resultTextBox.Dispatcher.Invoke(new Action(() => { 
-                            this.resultTextBox.AppendText(outLine.Data + Environment.NewLine); 
-                            this.resultTextBox.ScrollToEnd();
-                            if(outLine.Data != "Started") { 
-                                //var splited = outLine.Data.Split(": ");
-                                Channel chn = new Channel();
-                                chn.Channels = outLine.Data.Split(": ")[1];
-                                //MessageBox.Show(splited[1]);
-                                //MessageBox.Show(lbox.Items[lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels)].ToString());
-                                //MessageBox.Show(lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels).ToString());
-                                Channel chn2 = lbox.Items[lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels)] as Channel;
-                               // MessageBox.Show(outLine.Data.Split(": ")[0]);
-                                if (outLine.Data.Split(": ")[0] == "Stop" && chn2.start == "/data/2.png")
-                                {
-                                    StopStreaming(chn2.Channels);
-                                    chn2.start = "/data/1.png";
-                                }
-                                if (outLine.Data.Split(": ")[0] == "Start" && chn2.start == "/data/1.png")
-                                {
-                                    LoadStream(chn2.Channels);
-                                    chn2.start = "/data/2.png";
-                                }
-                                this.lbox.Items.Refresh();
 
-                            }
-                            else
-                            {
-                                //MessageBox.Show("Run Correct");
-                                Discord.Background = new SolidColorBrush(Colors.GreenYellow);
-                            }
-                        })); });
-                    DiscordBot.StartInfo.ArgumentList.Add($"/C {dir + @"\Data\Extensions\NodeJs\node.exe"} {dir + @"\Data\Extensions\Bot.js"} {""}");
-                    //bgrided.IsEnabled = false;
-                    DiscordBot.Start();
-                    DiscordBot.BeginOutputReadLine();
-                }
-                else{
-                    Discord.Background = new SolidColorBrush(Colors.OrangeRed);
-                    discordtabitem.Visibility = Visibility.Hidden;
-                    System.Diagnostics.Process process = new System.Diagnostics.Process();
-                    System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                    startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    startInfo.FileName = "cmd.exe";
-                    startInfo.Arguments = "/C" + $"taskkill /F /T /PID {DiscordBot.Id}";
-                    startInfo.UseShellExecute = false;
-                    startInfo.CreateNoWindow = true;
-                    process.StartInfo = startInfo;
-                    process.Start();
-                }
-            }
-            catch (Exception){
-                Console.Write("Hello World");
-            }
+        private void StartDiscord()
+        {
+            discordtabitem.Visibility = Visibility.Visible;
+            DiscordBot.StartInfo.FileName = dir + @"\Data\Extensions\Bot.exe";
+            DiscordBot.StartInfo.UseShellExecute = false;
+            DiscordBot.StartInfo.RedirectStandardOutput = true;
+            DiscordBot.StartInfo.CreateNoWindow = true;
+            DiscordBot.OutputDataReceived += new DataReceivedEventHandler((object? sendingProcess, DataReceivedEventArgs outLine) => {
+                if (!String.IsNullOrEmpty(outLine.Data)) this.resultTextBox.Dispatcher.Invoke(new Action(() => {
+                    this.resultTextBox.AppendText(outLine.Data + Environment.NewLine);
+                    this.resultTextBox.ScrollToEnd();
+                    if (outLine.Data != "Started")
+                    {
+                        Channel chn = new Channel();
+                        chn.Channels = outLine.Data.Split(": ")[1];
+                        Channel chn2 = lbox.Items[lbox.Items.Cast<Channel>().ToList().FindIndex(x => x.Channels == chn.Channels)] as Channel;
+                        if (outLine.Data.Split(": ")[0] == "Stop" && chn2.start == "/data/2.png")
+                        {
+                            StopStreaming(chn2.Channels);
+                            chn2.start = "/data/1.png";
+                        }
+                        if (outLine.Data.Split(": ")[0] == "Start" && chn2.start == "/data/1.png")
+                        {
+                            LoadStream(chn2.Channels);
+                            chn2.start = "/data/2.png";
+                        }
+                        this.lbox.Items.Refresh();
+
+                    }
+                    else
+                        SnackbarFour.MessageQueue.Enqueue("Error Load Discord Bot");
+
+
+                }));
+            });
+            DiscordBot.Start();
+            DiscordBot.BeginOutputReadLine();
         }
+        private void StopDiscord()
+        {
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "cmd.exe";
+            startInfo.Arguments = "/C" + $"taskkill /F /T /PID {DiscordBot.Id}";
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            process.StartInfo = startInfo;
+            process.Start();
+        }
+        
     }
 }
 

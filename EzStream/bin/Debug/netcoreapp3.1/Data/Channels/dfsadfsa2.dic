@@ -1,0 +1,8 @@
+[default_presets: Custom]
+[Name: dfsadfsa2]
+[Platform: Twitch]
+[FPS: 30]
+[Codec: h264_nvenc]
+[StreamKey: dfsdfa]
+[Bittrate: 1000k]
+[Preset: medium]

@@ -5,13 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-node",
+            "name": "Python: Archivo actual",
+            "type": "python",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "program": "${workspaceFolder}\\Bot.js"
+            "program": "${file}",
+            "console": "integratedTerminal"
         }
     ]
 }

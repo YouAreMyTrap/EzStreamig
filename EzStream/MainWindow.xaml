@@ -17,6 +17,8 @@
         ResizeMode="NoResize"
         Title="EzStreaming 2.1 - beta" Height="678" Width="641" Closed="Windows_Close">
     <Grid>
+
+
         <TabControl Style="{StaticResource MaterialDesignTabControl}" >
             <TabItem Header="Main" >
                 <Grid>
@@ -49,7 +51,7 @@
             </TabItem>
             <TabItem Header="New User">
                 <Grid>
-                    <Canvas x:Name="Custom" Margin="0,38,0,56" Grid.ColumnSpan="2">
+                    <Canvas x:Name="Custom" Margin="0,38,0,56">
 
                         <TextBox Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="Channel Name" Style="{StaticResource MaterialDesignFloatingHintTextBox}" x:Name="Channel_Name" Width="322" Canvas.Left="30" Canvas.Top="35" Cursor="IBeam">
                             <TextBox.Text>
@@ -110,6 +112,10 @@
                         </ComboBox>
                         <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="ytvideo" Content="Youtube Video" Height="20" Width="322" Checked="ytvideo_Checked" Unchecked="ytvideo_unchecked" Canvas.Left="380" Canvas.Top="67"/>
                         <CheckBox Foreground="{DynamicResource MaterialDesignBody}" x:Name="ytaudio" Content="Youtube Audio" Height="20" Width="322" Checked="ytaudio_Checked" Unchecked="ytaudio_unchecked" Canvas.Left="380" Canvas.Top="116" Visibility="Hidden"/>
+
+                        <Button x:Name="bgrided" Click="Button_Click"
+                            Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="False" materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Make" Margin="165,501,174,72" Cursor="Hand" Width="247" />
+
                     </Canvas>
 
                     <ComboBox Style="{StaticResource MaterialDesignOutlinedComboBox}" Foreground="{DynamicResource MaterialDesignBody}" x:Name="default_presets" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="612" DropDownClosed="default_presets_DropDownClosed" FlowDirection="LeftToRight">
@@ -122,8 +128,6 @@
                         <ComboBoxItem Content="CPU" IsEnabled="False"/>
                         <ComboBoxItem IsSelected="True" Content="Custom"/>
                     </ComboBox>
-                    <Button x:Name="bgrided" Click="Button_Click" Canvas.Left="30" Canvas.Top="35"
-                            Style="{StaticResource MaterialDesignRaisedButton}" materialDesign:ButtonProgressAssist.IsIndicatorVisible="False" materialDesign:ButtonProgressAssist.IsIndeterminate="True" Content="Make" Margin="165,501,174,72" Cursor="Hand"/>
 
                     <TextBox x:Name="ytlink_video" HorizontalAlignment="Left" Margin="250,101,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
                     <TextBox x:Name="ytlink_audio" HorizontalAlignment="Left" Margin="250,171,0,0" Text="Link Youtube" TextWrapping="Wrap" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden"/>
@@ -134,44 +138,56 @@
             </TabItem>
             <TabItem Header="Options">
                 <Grid>
-                    <TextBlock Foreground="{DynamicResource MaterialDesignBody}" HorizontalAlignment="Left" Margin="576,28,0,0" Text="By: YAMT" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="3.006,-6.511">
-                        <TextBlock.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="8.016"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </TextBlock.RenderTransform>
+
+                    <TextBlock Style="{StaticResource MaterialDesignHeadline3TextBlock}" Text="About" Foreground="{DynamicResource MaterialDesignBody}" Margin="18,291,475,250"/>
+                    <TextBlock Margin="18,364,515,201" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                        <Hyperlink  Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" 
+                                   NavigateUri="https://www.paypal.com/biz/fund?id=65SX2HLAZBQWU" Cursor="Hand" Click="Hyperlinks_click"> 
+                            PayPal 
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="18,389,515,176" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                        <Hyperlink  Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" 
+                                   NavigateUri="https://discord.gg/YpjxxDVK8x" Cursor="Hand" Click="Hyperlinks_click"> 
+                            Discord 
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="18,413,515,152" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                        <Hyperlink  Foreground="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" 
+                                   NavigateUri="https://github.com/YouAreMyTrap/EzStreamig/" Cursor="Hand" Click="Hyperlinks_click"> 
+                            GitHub 
+                        </Hyperlink>
                     </TextBlock>
                     <Label Content="Donations:" HorizontalAlignment="Left" Margin="12,166,0,0" VerticalAlignment="Top" Visibility="Hidden" Grid.ColumnSpan="2" Grid.Column="1"/>
 
-                    <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Left" Margin="387,242,0,0" VerticalAlignment="Top" Width="210" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click" Height="37"/>
-                    <TextBox Foreground="{DynamicResource MaterialDesignBody}" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Write Channels Name for AutoRun" HorizontalAlignment="Left" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" Margin="387,83,0,0" VerticalAlignment="Top" Width="210" Height="154" Visibility="Visible" Cursor="IBeam"/>
-                    <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="442,6,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
-                    <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="310,6,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
-                    <Button x:Name="Discord" Content="Discord Bot" HorizontalAlignment="Left" Margin="387,41,0,0" VerticalAlignment="Top" Click="Discord_Click" Background="OrangeRed"/>
-                    <StackPanel Orientation="Horizontal" Margin="10,193,437,371">
-                        <ToggleButton Margin="8 0 16 0"/>
+                    <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Left" Margin="387,184,0,0" VerticalAlignment="Top" Width="210" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click" Height="37"/>
+                    <TextBox Foreground="{DynamicResource MaterialDesignBody}" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Write Channels Name for AutoRun" HorizontalAlignment="Left" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" Margin="387,23,0,0" VerticalAlignment="Top" Width="210" Height="154" Visibility="Visible" Cursor="IBeam"/>
+                    <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="173,205,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
+                    <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="18,205,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
+                    <StackPanel Orientation="Horizontal" Margin="12,22,435,542">
+                        <ToggleButton x:Name="togglebutton_DiscordBot" Margin="8 0 16 0" Checked="togglebutton_DiscordBot_Checked" Unchecked="togglebutton_DiscordBot_Checked"/>
                         <TextBlock VerticalAlignment="Center" Text="Discord Bot" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="10,218,366,346">
+                    <StackPanel Orientation="Horizontal" Margin="12,57,321,507">
                         <ToggleButton x:Name="togglebutton_AutoRunEzStreaming" Margin="8 0 16 0" Checked="togglebutton_AutoRunEzStreaming_Checked" Unchecked="togglebutton_AutoRunEzStreaming_Checked"/>
                         <TextBlock VerticalAlignment="Center" Text="Auto Run EzStreaming" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="10,248,377,316">
+                    <StackPanel Orientation="Horizontal" Margin="12,92,375,472">
                         <ToggleButton x:Name="togglebutton_AutoRunChannels" Margin="8 0 16 0" Checked="togglebutton_AutoRunChannels_Checked" Unchecked="togglebutton_AutoRunChannels_Checked" />
                         <TextBlock VerticalAlignment="Center" Text="Auto Run Channels" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="10,275,377,289">
+                    <StackPanel Orientation="Horizontal" Margin="12,127,304,437">
                         <ToggleButton x:Name="togglebutton_StartVerify" Margin="8 0 16 0" Checked="togglebutton_StartVerify_Checked" Unchecked="togglebutton_StartVerify_Checked" />
                         <TextBlock VerticalAlignment="Center" Text="Verify update on start?" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem x:Name="discordtabitem" Header="Discord Bot" Visibility="Hidden">
-                <Grid Background="#FFE5E5E5">
-                    <TextBox x:Name="resultTextBox"
+                <Grid>
+                    <TextBox x:Name="resultTextBox" 
+                         Foreground="{DynamicResource MaterialDesignBody}" 
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                         materialDesign:HintAssist.Hint="Discord Bot Commands"
                          Margin="39,18,36,8"
                          TextWrapping="NoWrap"
                          IsReadOnly="True"
@@ -181,6 +197,6 @@
                 </Grid>
             </TabItem>
         </TabControl>
-
+        <materialDesign:Snackbar x:Name="SnackbarFour" MessageQueue="{materialDesign:MessageQueue}" />
     </Grid>
 </Window>

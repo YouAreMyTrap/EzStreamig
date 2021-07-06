@@ -27,18 +27,19 @@ namespace EzStreaming.Scripts
                 return sb.ToString();
             }
         }
-        public static void CheckFiles(string dir)
+        public static void CheckFiles(string dir, MaterialDesignThemes.Wpf.Snackbar snackbar = null)
         {
-            if (CreateMD5(dir + "/Data/ffmpeg.exe") != "6FF3B9C74BE96F064CAA17191E0718AF")
+            
+            if (CreateMD5(dir + "/Data/ffmpeg.exe") != "ED42CC33AED5FEEA6DE35EFC4B63247B")
             {
-                MessageBox.Show("Fixing: ffmpeg");
+                if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: ffmpeg");
                 File.Delete(dir + "/Data/ffmpeg.exe");
                 using (WebClient wc = new WebClient())
                     wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), dir + "/Data/ffmpeg.exe");
             }
-            if (CreateMD5(dir + "/Data/youtube-dl.exe") != "7D71FBDEE51BA630BA2D669FBB583425")
+            if (CreateMD5(dir + "/Data/youtube-dl.exe") != "A31C43FD4121A76EA00AA52BECE3FF69")
             {
-                MessageBox.Show("Fixing: youtube-dl");
+                if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: youtube-dl");
                 File.Delete(dir + "/Data/youtube-dl.exe");
                 using (WebClient wc = new WebClient())
                     wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
