@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['D:\\Documents\\EzStreamig\\Discord Bot\\Bot.py'],
+a = Analysis(['Bot.py'],
              pathex=['D:\\Documents\\EzStreamig\\Discord Bot'],
              binaries=[],
              datas=[],
@@ -31,4 +31,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True )
+          console=True , icon='avatar.ico')

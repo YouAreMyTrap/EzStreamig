@@ -70,5 +70,17 @@ namespace EzStreaming.Properties {
                 this["Discord_bool"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Discord_key {
+            get {
+                return ((string)(this["Discord_key"]));
+            }
+            set {
+                this["Discord_key"] = value;
+            }
+        }
     }
 }

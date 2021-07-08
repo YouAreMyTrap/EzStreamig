@@ -34,10 +34,9 @@ namespace EzStreaming
                 Directory.CreateDirectory(dir + "/Data/Audio");
                 Directory.CreateDirectory(dir + "/Data/Extensions");
                 Directory.CreateDirectory(dir + "/Data/Channels");
+                Directory.CreateDirectory(dir + "/Data/Channels");
                 File.Create(dir + "/Data/Channels.txt").Dispose();
             }
-            if (!Directory.Exists(dir + "/Data/Channels"))
-                Directory.CreateDirectory(dir + "/Data/Channels");
             try
             {
                 if (!File.Exists(dir + "/Data/ffmpeg.exe"))
@@ -46,14 +45,16 @@ namespace EzStreaming
                 if (!File.Exists(dir + "/Data/youtube-dl.exe"))
                     using (WebClient wc = new WebClient())
                         wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
+                if (!File.Exists(dir + "/Data/Extensions/BotDiscord.exe"))
+                    using (WebClient wc = new WebClient())
+                        wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
             }
             catch
             {
                 MessageBox.Show("Error of download files, no problem i'm fixing");
                 Functions.CheckFiles(dir);
             }
-            if (EzStreaming.Properties.Settings.Default.StartVery)
-                Functions.UpdateProgram();
+            if (EzStreaming.Properties.Settings.Default.StartVery) Functions.UpdateProgram();
             MainWindow win2 = new MainWindow();
             win2.Show();
             this.Close();

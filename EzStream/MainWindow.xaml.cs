@@ -43,6 +43,8 @@ namespace EzStream
             tbMultiLine.IsEnabled = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
             autostart_button_save.IsEnabled = EzStreaming.Properties.Settings.Default.AutoRunCh_bool;
 
+            discordkey_text_dialog.Text = EzStreaming.Properties.Settings.Default.Discord_key;
+
             tbMultiLine.Text = File.ReadAllText(dir + "/Data/Channels.txt");
 
             if (EzStreaming.Properties.Settings.Default.Discord_bool) StartDiscord();
@@ -90,7 +92,8 @@ namespace EzStream
                 DirectoryInfo dir2 = new DirectoryInfo(dir + "/Data/");
                 FileInfo[] files = dir2.GetFiles(chn.Channels + "*", SearchOption.AllDirectories);
                 Array.ForEach(files, file => File.Delete(file.ToString()));
-                this.lbox.Items.Remove(chn);
+                ListChannels.Remove(chn);
+                lbox.Items.Refresh();
             }
         }
         #region newuser
@@ -329,9 +332,9 @@ namespace EzStream
 
         private void togglebutton_AutoRunChannels_Checked(object sender, RoutedEventArgs e)
         {
-            EzStreaming.Properties.Settings.Default.AutoRunCh_bool = (bool)togglebutton_AutoRunChannels.IsChecked;
             tbMultiLine.IsEnabled = (bool)togglebutton_AutoRunChannels.IsChecked;
             autostart_button_save.IsEnabled = (bool)togglebutton_AutoRunChannels.IsChecked;
+            EzStreaming.Properties.Settings.Default.AutoRunCh_bool = (bool)togglebutton_AutoRunChannels.IsChecked;
             EzStreaming.Properties.Settings.Default.Save();
             SnackbarFour.MessageQueue.Enqueue($"Auto Run Channels: {(bool)togglebutton_AutoRunChannels.IsChecked}");
         }
@@ -341,19 +344,19 @@ namespace EzStream
             object Index = "Startup";
             IWshRuntimeLibrary.WshShell wshShell = new IWshRuntimeLibrary.WshShellClass();
             string file = (string)wshShell.SpecialFolders.Item(ref Index) + "\\EzStreaming.lnk";
-            //Process.GetCurrentProcess().MainModule.FileName
             if ((bool)togglebutton_AutoRunEzStreaming.IsChecked)
             {
                 IWshRuntimeLibrary.IWshShortcut obj = (IWshRuntimeLibrary.IWshShortcut)wshShell.CreateShortcut(file);
                 obj.Description = "EzStreming Shortcut";
                 obj.TargetPath = Process.GetCurrentProcess().MainModule.FileName;
                 obj.Save();
+                
             }
             else
             {
                 File.Delete(file);
             }
-
+            EzStreaming.Properties.Settings.Default.AutoRun_bool = (bool)togglebutton_AutoRunEzStreaming.IsChecked;
             EzStreaming.Properties.Settings.Default.Save();
             SnackbarFour.MessageQueue.Enqueue($"Startup EzStreaming: {(bool)togglebutton_AutoRunEzStreaming.IsChecked}");
         }
@@ -361,6 +364,7 @@ namespace EzStream
         private void togglebutton_StartVerify_Checked(object sender, RoutedEventArgs e)
         {
             EzStreaming.Properties.Settings.Default.StartVery = (bool)togglebutton_StartVerify.IsChecked;
+            EzStreaming.Properties.Settings.Default.Save();
             SnackbarFour.MessageQueue.Enqueue($"SVerify Files on start: {(bool)togglebutton_StartVerify.IsChecked}");
 
         }
@@ -380,9 +384,11 @@ namespace EzStream
 
         private void togglebutton_DiscordBot_Checked(object sender, RoutedEventArgs e)
         {
+            if((bool)togglebutton_DiscordBot.IsChecked) DialogHost.IsOpen = true;
             EzStreaming.Properties.Settings.Default.Discord_bool = (bool)togglebutton_DiscordBot.IsChecked;
             EzStreaming.Properties.Settings.Default.Save();
             SnackbarFour.MessageQueue.Enqueue($"Please Restart app for: {(bool)togglebutton_DiscordBot.IsChecked} Discord Bot");
+
         }
 
         private void CheckUpdates_Click(object sender, RoutedEventArgs e)
@@ -391,13 +397,31 @@ namespace EzStream
             SnackbarFour.MessageQueue.Enqueue("Check Update Program");
         }
 
+        private void button_save_dialog(object sender, RoutedEventArgs e)
+        {
+            EzStreaming.Properties.Settings.Default.Discord_key = discordkey_text_dialog.Text;
+            EzStreaming.Properties.Settings.Default.Save();
+            DialogHost.IsOpen = false;
+        }
+
         private void StartDiscord()
         {
             discordtabitem.Visibility = Visibility.Visible;
-            DiscordBot.StartInfo.FileName = dir + @"\Data\Extensions\Bot.exe";
+            DiscordBot.StartInfo.FileName = dir + @"\Data\Extensions\BotDiscord.exe";
             DiscordBot.StartInfo.UseShellExecute = false;
             DiscordBot.StartInfo.RedirectStandardOutput = true;
+            DiscordBot.StartInfo.RedirectStandardError = true;
             DiscordBot.StartInfo.CreateNoWindow = true;
+            DiscordBot.ErrorDataReceived += new DataReceivedEventHandler((object? sendingProcess, DataReceivedEventArgs outLine) => {
+                if (!String.IsNullOrEmpty(outLine.Data)) this.resultTextBox.Dispatcher.Invoke(new Action(() =>
+                {
+                    if (outLine.Data == "discord.errors.LoginFailure: Improper token has been passed.")
+                    {
+                        discord_text_togle.Foreground = Brushes.OrangeRed;
+                        SnackbarFour.MessageQueue.Enqueue("Error Load Discord Bot, please set crrect key");
+                    }
+                }));
+            });
             DiscordBot.OutputDataReceived += new DataReceivedEventHandler((object? sendingProcess, DataReceivedEventArgs outLine) => {
                 if (!String.IsNullOrEmpty(outLine.Data)) this.resultTextBox.Dispatcher.Invoke(new Action(() => {
                     this.resultTextBox.AppendText(outLine.Data + Environment.NewLine);
@@ -420,14 +444,18 @@ namespace EzStream
                         this.lbox.Items.Refresh();
 
                     }
-                    else
-                        SnackbarFour.MessageQueue.Enqueue("Error Load Discord Bot");
+                    else{ 
+                        SnackbarFour.MessageQueue.Enqueue("Load Discord Bot");
+                        discord_text_togle.Foreground = Brushes.YellowGreen;
+                    }
 
 
                 }));
             });
+            DiscordBot.StartInfo.Arguments = EzStreaming.Properties.Settings.Default.Discord_key;
             DiscordBot.Start();
             DiscordBot.BeginOutputReadLine();
+            DiscordBot.BeginErrorReadLine();
         }
         private void StopDiscord()
         {

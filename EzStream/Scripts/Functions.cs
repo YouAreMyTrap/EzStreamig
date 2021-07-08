@@ -30,20 +30,33 @@ namespace EzStreaming.Scripts
         public static void CheckFiles(string dir, MaterialDesignThemes.Wpf.Snackbar snackbar = null)
         {
             
-            if (CreateMD5(dir + "/Data/ffmpeg.exe") != "ED42CC33AED5FEEA6DE35EFC4B63247B")
+            if (!File.Exists(dir + "/Data/ffmpeg.exe") || CreateMD5(dir + "/Data/ffmpeg.exe") != "ED42CC33AED5FEEA6DE35EFC4B63247B")
             {
                 if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: ffmpeg");
                 File.Delete(dir + "/Data/ffmpeg.exe");
                 using (WebClient wc = new WebClient())
                     wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/ffmpeg.exe"), dir + "/Data/ffmpeg.exe");
             }
-            if (CreateMD5(dir + "/Data/youtube-dl.exe") != "A31C43FD4121A76EA00AA52BECE3FF69")
+            if (!File.Exists(dir + "/Data/youtube-dl.exe") || CreateMD5(dir + "/Data/youtube-dl.exe") != "A31C43FD4121A76EA00AA52BECE3FF69")
             {
                 if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: youtube-dl");
                 File.Delete(dir + "/Data/youtube-dl.exe");
                 using (WebClient wc = new WebClient())
                     wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
             }
+            if (!File.Exists(dir + "/Data/Extensions/BotDiscord.exe") || CreateMD5(dir + "/Data/Extensions/BotDiscord.exe") != "7ED5AB3C440FD4340AB30CDA19E8AC4C")
+            {
+                if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: DiscordBot");
+                File.Delete(dir + "/Data/Extensions/BotDiscord.exe");
+                using (WebClient wc = new WebClient())
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
+            }
+            if (!Directory.Exists(dir + "/Data")) Directory.CreateDirectory(dir + "/Data");
+            if (!Directory.Exists(dir + "/Data/Video")) Directory.CreateDirectory(dir + "/Data/Video");
+            if (!Directory.Exists(dir + "/Data/Audio")) Directory.CreateDirectory(dir + "/Data/Audio");
+            if (!Directory.Exists(dir + "/Data/Extensions")) Directory.CreateDirectory(dir + "/Data/Extensions");
+            if (!Directory.Exists(dir + "/Data/Channels")) Directory.CreateDirectory(dir + "/Data/Channels");
+            if (!File.Exists(dir + "/Data/Channels.txt")) File.Create(dir + "/Data/Channels.txt").Dispose();
         }
         public static void UpdateProgram()
         {

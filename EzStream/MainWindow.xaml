@@ -15,7 +15,7 @@
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="EzStreaming 2.1 - beta" Height="678" Width="641" Closed="Windows_Close">
+        Title="EzStreaming 2.2" Height="678" Width="641" Closed="Windows_Close">
     <Grid>
 
 
@@ -159,25 +159,33 @@
                         </Hyperlink>
                     </TextBlock>
                     <Label Content="Donations:" HorizontalAlignment="Left" Margin="12,166,0,0" VerticalAlignment="Top" Visibility="Hidden" Grid.ColumnSpan="2" Grid.Column="1"/>
+                    <materialDesign:DialogHost x:Name="DialogHost">
+                        <materialDesign:DialogHost.DialogContent>
+                            <StackPanel Margin="20">
+                                <TextBox x:Name="discordkey_text_dialog" Foreground="{DynamicResource MaterialDesignBody}" materialDesign:HintAssist.Hint="Set Discord key" Style="{StaticResource MaterialDesignFloatingHintTextBox}" Text="" Width="322" Height="37" Canvas.Left="30" Canvas.Top="74"/>
+                                <Button Content="Save" Style="{StaticResource MaterialDesignFlatButton}" Margin="0 8 8 0" Click="button_save_dialog"/>
 
+                            </StackPanel>
+                        </materialDesign:DialogHost.DialogContent>
+                    </materialDesign:DialogHost>
                     <Button x:Name="autostart_button_save" Content="Save" HorizontalAlignment="Left" Margin="387,184,0,0" VerticalAlignment="Top" Width="210" RenderTransformOrigin="-0.25,-0.198" Visibility="Visible" Click="autostart_button_save_Click" Height="37"/>
                     <TextBox Foreground="{DynamicResource MaterialDesignBody}" Style="{StaticResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Write Channels Name for AutoRun" HorizontalAlignment="Left" Name="tbMultiLine" TextWrapping="Wrap" AcceptsReturn="True" Margin="387,23,0,0" VerticalAlignment="Top" Width="210" Height="154" Visibility="Visible" Cursor="IBeam"/>
                     <Button x:Name="VerifyFiles" Content="Check Files" HorizontalAlignment="Left" Margin="173,205,0,0" VerticalAlignment="Top" Click="VerifyFiles_Click"/>
                     <Button x:Name="CheckUpdates" Content="Check Updates" HorizontalAlignment="Left" Margin="18,205,0,0" VerticalAlignment="Top" Click="CheckUpdates_Click"/>
                     <StackPanel Orientation="Horizontal" Margin="12,22,435,542">
-                        <ToggleButton x:Name="togglebutton_DiscordBot" Margin="8 0 16 0" Checked="togglebutton_DiscordBot_Checked" Unchecked="togglebutton_DiscordBot_Checked"/>
-                        <TextBlock VerticalAlignment="Center" Text="Discord Bot" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
+                        <ToggleButton x:Name="togglebutton_DiscordBot" Margin="8 0 16 0" Click="togglebutton_DiscordBot_Checked"/>
+                        <TextBlock x:Name="discord_text_togle" VerticalAlignment="Center" Text="Discord Bot" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="12,57,321,507">
-                        <ToggleButton x:Name="togglebutton_AutoRunEzStreaming" Margin="8 0 16 0" Checked="togglebutton_AutoRunEzStreaming_Checked" Unchecked="togglebutton_AutoRunEzStreaming_Checked"/>
+                        <ToggleButton x:Name="togglebutton_AutoRunEzStreaming" Margin="8 0 16 0" Click="togglebutton_AutoRunEzStreaming_Checked"/>
                         <TextBlock VerticalAlignment="Center" Text="Auto Run EzStreaming" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="12,92,375,472">
-                        <ToggleButton x:Name="togglebutton_AutoRunChannels" Margin="8 0 16 0" Checked="togglebutton_AutoRunChannels_Checked" Unchecked="togglebutton_AutoRunChannels_Checked" />
+                        <ToggleButton x:Name="togglebutton_AutoRunChannels" Margin="8 0 16 0" Click="togglebutton_AutoRunChannels_Checked" />
                         <TextBlock VerticalAlignment="Center" Text="Auto Run Channels" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="12,127,304,437">
-                        <ToggleButton x:Name="togglebutton_StartVerify" Margin="8 0 16 0" Checked="togglebutton_StartVerify_Checked" Unchecked="togglebutton_StartVerify_Checked" />
+                        <ToggleButton x:Name="togglebutton_StartVerify" Margin="8 0 16 0" Click="togglebutton_StartVerify_Checked" />
                         <TextBlock VerticalAlignment="Center" Text="Verify update on start?" Style="{StaticResource MaterialDesignHeadline6TextBlock}" Foreground="{DynamicResource MaterialDesignBody}"/>
                     </StackPanel>
                 </Grid>
