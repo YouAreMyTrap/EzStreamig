@@ -47,7 +47,7 @@ namespace EzStreaming
                         wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/youtube-dl.exe"), dir + "/Data/youtube-dl.exe");
                 if (!File.Exists(dir + "/Data/Extensions/BotDiscord.exe"))
                     using (WebClient wc = new WebClient())
-                        wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
+                        wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/Discord%20Bot/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
             }
             catch
             {

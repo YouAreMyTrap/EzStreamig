@@ -326,7 +326,7 @@ namespace EzStream
 
         private void Windows_Close(object sender, EventArgs e)
         {
-            StopDiscord();
+            if (EzStreaming.Properties.Settings.Default.Discord_bool) StopDiscord();
         }
 
 

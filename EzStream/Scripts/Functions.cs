@@ -49,7 +49,7 @@ namespace EzStreaming.Scripts
                 if (snackbar != null) snackbar.MessageQueue.Enqueue("Fixing: DiscordBot");
                 File.Delete(dir + "/Data/Extensions/BotDiscord.exe");
                 using (WebClient wc = new WebClient())
-                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
+                    wc.DownloadFileAsync(new Uri("https://github.com/YouAreMyTrap/EzStreamig/raw/main/Discord%20Bot/dist/BotDiscord.exe"), dir + "/Data/Extensions/BotDiscord.exe");
             }
             if (!Directory.Exists(dir + "/Data")) Directory.CreateDirectory(dir + "/Data");
             if (!Directory.Exists(dir + "/Data/Video")) Directory.CreateDirectory(dir + "/Data/Video");
