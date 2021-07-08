@@ -20,8 +20,8 @@ namespace EzStream
     /// </summary>
     public partial class MainWindow : Window
     {
-        public string video, audio, dir = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
-        public class Channel { public string Channels { get; set; } public string start { get; set; } }
+        public string video, video2, audio, audio2, dir = System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+        public class Channel { public string Channels { get; set; } public string start { get; set; } public string Platform { get; set; } }
         ArrayList ListChannels = new ArrayList();
         public string[] vs = Directory.GetFiles(System.IO.Path.GetDirectoryName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName) + "/Data/", "*.bat");
         public List<string> ChannelsAutoRun = new List<string>();
@@ -29,7 +29,7 @@ namespace EzStream
         private Process DiscordBot = new Process();
 
 
-        void GetChannels() => Array.ForEach(vs, x => ListChannels.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" }));
+        void GetChannels() => Array.ForEach(vs, x => ListChannels.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), Platform = "Twitch", start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "Stop" : "Play" }));
             //foreach (string x in vs)
               //  this.lbox.Items.Add(new Channel { Channels = System.IO.Path.GetFileNameWithoutExtension(x), start = (EzStreaming.Properties.Settings.Default.AutoRunCh_bool && ChannelsAutoRun.Contains(System.IO.Path.GetFileNameWithoutExtension(x))) ? "/data/2.png" : "/data/1.png" });
 
@@ -57,12 +57,12 @@ namespace EzStream
             Button button = sender as Button;
             Channel chn = button.DataContext as Channel;
 
-            if (chn.start == "/data/1.png"){ 
-                chn.start = "/data/2.png";
+            if (chn.start == "Play"){ 
+                chn.start = "Stop";
                 LoadStream(chn.Channels);
             }
             else{
-                chn.start = "/data/1.png";
+                chn.start = "Play";
                 StopStreaming(chn.Channels);
             }
             this.lbox.Items.Refresh();
@@ -174,25 +174,25 @@ namespace EzStream
                 SetAudio();
                 switch (default_presets.Text){
                     case "MusicStreamer/MassStreamer by viri":
-                        if ((bool)cb2.IsChecked)
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 - preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                        if (audio != "")
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v libx264 - preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v libx264 -preset veryfast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU NVIDEA":
-                        if ((bool)cb2.IsChecked)
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                        if (audio != "")
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v h264_nvenc -preset fast -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "MusicStreamer/MassStreamer by viri - MOD GPU AMD":
-                        if ((bool)cb2.IsChecked)
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                        if (audio != "")
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                         else
-                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                            Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v h264_amf -b:v 3000k -maxrate 3000k -bufsize 6000k -pix_fmt yuv420p -g 50 -c:a aac -b:a 160k -ac 2 -ar 44100 -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "autoStreamerv2 - Grand Bob":
-                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -codec:v libx264 -pix_fmt yuv420p -preset veryfast -b:v 400k -g 10.0 -codec:a aac -b:a 96k -ar 44100 -maxrate 400k -bufsize 200k -strict experimental -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -codec:v libx264 -pix_fmt yuv420p -preset veryfast -b:v 400k -g 10.0 -codec:a aac -b:a 96k -ar 44100 -maxrate 400k -bufsize 200k -strict experimental -f flv rtmp://live.twitch.tv/app/{stream_key.Text}", dir, Channel_Name.Text);
                       break;
                     case "GPU NVIDEA":
                       break;
@@ -201,11 +201,11 @@ namespace EzStream
                     case "CPU":
                       break;
                     case "Custom":
-                        if (audio == "") { 
-                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
+                        if (audio != "") { 
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio)} -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
                         }
                         else { 
-                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
+                        Functions.fabric($"ffmpeg -stream_loop -1 -i {"./Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video2)} -c:v {Codec_sel.Text} -preset fast -b:v {bittrate.Text} -bufsize {bittrate.Text} -b:a 128k -flvflags no_duration_filesize -pix_fmt yuv420p -r {fps.Text} -f flv {GetPlatform(Plarfomr_sel.Text) + stream_key.Text}", dir, Channel_Name.Text);
                         }
                         break;
                 }
@@ -229,6 +229,7 @@ namespace EzStream
                 var FileDestination = new FileInfo(dir + "/Data/Video/" + Channel_Name.Text + System.IO.Path.GetExtension(video));
                 var FileSource = new FileInfo(video);
                 int vaule;
+                video2 = video;
                 Task.Run(() => { FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => vaule = x)); }).GetAwaiter();
 
             }
@@ -242,7 +243,7 @@ namespace EzStream
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.CreateNoWindow = true;
                 process.Start();
-                video = dir + "/Data/Video/" + Channel_Name.Text + ".mp4";
+                video2 = dir + "/Data/Video/" + Channel_Name.Text + ".mp4";
                 process.WaitForExit();
             }
             SnackbarFour.MessageQueue.Enqueue("Video Correct");
@@ -250,10 +251,11 @@ namespace EzStream
         void SetAudio()
         {
             //copy music to folder music
-            if (audio == "") {
+            if (audio != "") {
                 var FileDestination = new FileInfo(dir + "/Data/Audio/" + Channel_Name.Text + System.IO.Path.GetExtension(audio));
                 var FileSource = new FileInfo(audio);
                 int vaule;
+                audio2 = audio;
                 Task.Run(() => { FileSource.CopyTo(FileDestination, x => Dispatcher.Invoke(() => vaule = x)); }).GetAwaiter();
                 SnackbarFour.MessageQueue.Enqueue("Audio Correct");
             }

@@ -7,7 +7,7 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {},
     ".NETCoreApp,Version=v3.1/win-x64": {
-      "EzStreaming/2.0.5.0": {
+      "EzStreaming/2.0.5.1": {
         "dependencies": {
           "Autoupdater.NET.Official": "1.6.4",
           "MaterialDesignColors": "2.0.1",
@@ -166,7 +166,7 @@
     }
   },
   "libraries": {
-    "EzStreaming/2.0.5.0": {
+    "EzStreaming/2.0.5.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

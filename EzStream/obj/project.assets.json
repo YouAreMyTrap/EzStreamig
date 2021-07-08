@@ -319,7 +319,7 @@
     "C:\\Users\\yumin\\.nuget\\packages\\": {}
   },
   "project": {
-    "version": "2.0.5",
+    "version": "2.0.5.1",
     "restore": {
       "projectUniqueName": "D:\\Documents\\EzStreamig\\EzStream\\EzStreaming.csproj",
       "projectName": "EzStreaming",

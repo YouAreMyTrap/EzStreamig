@@ -34,11 +34,11 @@
                                         <ColumnDefinition Width="50" />
                                     </Grid.ColumnDefinitions>
                                     <!--<Image Source="/WpfTutorialSamples;component/Images/bullet_red.png" />-->
-                                    <materialDesign:PackIcon Kind="Twitch" Grid.Column="0"/>
+                                    <materialDesign:PackIcon Kind="{Binding Platform}" Grid.Column="0"/>
                                     <TextBlock Text="{Binding Channels}" Grid.Column="1"/>
 
                                     <Button x:Name="btn1" Click="btn1_Click" Grid.Column="2">
-                                        <materialDesign:PackIcon Kind="Play"/>
+                                        <materialDesign:PackIcon Kind="{Binding start}"/>
                                     </Button>
                                     <Button x:Name="btn3" Click="btn3_Click" Grid.Column="3">
                                         <materialDesign:PackIcon Kind="Delete" />

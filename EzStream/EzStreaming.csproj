@@ -5,11 +5,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>1fe9c03aa5c82f09aa1705c699767d09.ico</ApplicationIcon>
-    <Version>2.0.5.0</Version>
+    <Version>2.0.5.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <AssemblyVersion>2.0.5.1</AssemblyVersion>
     <FileVersion>2.0.5.0</FileVersion>
-    <SignAssembly>false</SignAssembly>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>EzStreaming.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
